@@ -7,6 +7,127 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <jsp:include page="header.jsp"/>
+<div id="body_container">
+    <div id="dgcontainer" style="margin-left: auto; margin-right: auto; width: 99%">
+        <table id="dg" title="Manage Analytical Data" class="easyui-datagrid" 
+               style="width:100%;height:450px;margin-left:auto;margin-right:auto;"
+               align="center"
+               url="DataController?action=listCvgData"
+               toolbar="#toolbar"
+               rownumbers="true" fitColumns="true" 
+               idField="id"
+               singleSelect="true" pagination="true">
+            <thead>
+                <tr>
+                    <th field="id" width="5" align="center" hidden="true"><b>Id</b></th>
+                    <th field="newsDate" formatter="formatDate"><b>News Date</b></th>
+                    <th field="newspaper"><b>Newspaper</b></th>
+                    <th field="language"><b>Language</b></th>
+                    <th field="headline" width="50"><b>Headline</b></th>
+                    <th field="edition"><b>Edition</b></th>                    
+                    <th field="supplement" width="50"><b>Supplement</b></th>
+                    <th field="source"><b>Source</b></th>
+                    <th field="pageNo" width="35" align="right"><b>Page No</b></th>
+                    <th field="height" width="35" align="right"><b>Height</b></th>
+                    <th field="width" width="35" align="right"><b>Width</b></th>
+                    <th field="totalArticleSize" width="50" align="right"><b>Total Article Size</b></th>
+                    <th field="circulationFigure" width="50" align="right"><b>Circulation Figure</b></th>
+                    <th field="quantitativeAve" width="50" align="right"><b>Quantitative AVE</b></th>
+                    <th field="journalistFactor" width="50" align="right"><b>Journalist Factor</b></th>
+                    <th field="imageUrl" align="center"><b>Image</b></th>
+                </tr>
+            </thead>
+        </table>        
+    </div>
+    <div id="toolbar">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCvgData()">Add Data</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCvgData()">Edit Data</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyCvgData()">Remove Data</a>
+    </div>
+    <div id="dlg" class="easyui-dialog" style="width:50%;height:560px;padding:10px 20px"
+         closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">Manage Analytical Data</div>
+        <form id="fm" method="post" enctype="multipart/form-data" novalidate>
+            <div class="fitem" hidden="true">
+                <input name="id" class="easyui-textbox"/>
+            </div>
+            <div class="fitem">
+                <label>News Date:</label>
+                <input id="newsDate" name="newsDate" class="easyui-datebox" validType="validDate"
+                       data-options="formatter:myformatter,parser:myparser" required="true"/>
+                <label><i>(dd/mm/yyyy)</i></label>
+            </div>        
+            <div class="fitem">
+                <label>Newspaper:</label>
+                <input name="newspaper" class="easyui-textbox" style="width:300px" required="true">
+            </div>
+            <div class="fitem">
+                <label>Language:</label>
+                <input name="language" class="easyui-combobox" required="true"
+                       data-options="
+                       valueField: 'value',
+                       textField: 'value',
+                       url: 'DataController?action=getLanguages'">
+            </div>        
+            <div class="fitem">
+                <label>Headline:</label>
+                <input name="headline" class="easyui-textbox" style="width:300px" required="true">
+            </div>        
+            <div class="fitem">
+                <label>Edition</label>
+                <input name="edition" class="easyui-textbox" style="width:300px" required="true">
+            </div>
+            <div class="fitem">
+                <label>Supplement</label>
+                <input name="supplement" class="easyui-textbox" style="width:300px">
+            </div>
+            <div class="fitem">
+                <label>Source:</label>
+                <input name="source" class="easyui-textbox" style="width:300px">
+            </div>
+            <div class="fitem">
+                <label>Page No:</label>
+                <input name="pageNo" class="easyui-numberbox">
+            </div>
+            <div class="fitem">
+                <label>Height:</label>
+                <input name="height" class="easyui-numberbox">
+            </div>
+            <div class="fitem">
+                <label>Width:</label>
+                <input name="width" class="easyui-numberbox">
+            </div>
+            <div class="fitem">
+                <label>Total Article Size:</label>
+                <input name="totalArticleSize" class="easyui-numberbox">
+            </div>
+            <div class="fitem">
+                <label>Circulation Figure:</label>
+                <input name="circulationFigure" class="easyui-numberbox">
+            </div>
+            <div class="fitem">
+                <label>Quantitative AVE:</label>
+                <input name="quantitativeAve" class="easyui-numberbox" required="true"
+                       data-options="
+                       min:0,
+                       precision:2">
+            </div>
+            <div class="fitem">
+                <label>Journalist Factor:</label>
+                <input name="journalistFactor" class="easyui-numberbox" validType="validJF" required="true">
+            </div>
+            <div class="fitem">
+                <label>Image:</label>
+                <input name="image" accept="image/*" class="easyui-filebox" style="width:380px" 
+                       data-options="buttonText: 'Choose Image', buttonAlign: 'left'">
+            </div>
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCvgData()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+</div>
 <link rel="stylesheet" type="text/css" href="js/easyui/themes/gray/easyui.css">
 <link rel="stylesheet" type="text/css" href="js/easyui/themes/icon.css">
 <style type="text/css">
@@ -53,9 +174,9 @@
             url = 'DataController?action=saveCvgData';
         } else {
             $.messager.show({
-                        title: 'Error',
-                        msg: 'Please select a row'
-                    });
+                title: 'Error',
+                msg: 'Please select a row'
+            });
         }
     }
     function saveCvgData() {
@@ -97,9 +218,9 @@
             });
         } else {
             $.messager.show({
-                        title: 'Error',
-                        msg: 'Please select a row'
-                    });
+                title: 'Error',
+                msg: 'Please select a row'
+            });
         }
     }
 </script>
@@ -237,7 +358,8 @@
     function formatDate(value) {
         var d = new Date(value);
         return $.fn.datebox.defaults.formatter(d);
-    };
+    }
+    ;
     function getMonth(str) {
         var arr = str.split(' ');
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -247,185 +369,71 @@
             {
                 break;
             }
-        } 
+        }
         return m;
-    };
+    }
+    ;
     function getDay(str) {
         var arr = str.split(' ');
         var d = arr[1].replace(',', '');
         return d;
-    };
+    }
+    ;
     function getYear(str) {
         var arr = str.split(', ');
         return arr[1];
-    }; 
-    function myformatter(date){
+    }
+    ;
+    function myformatter(date) {
         var y = date.getFullYear();
-        var m = date.getMonth()+1;
+        var m = date.getMonth() + 1;
         var d = date.getDate();
-        return (d<10?('0'+d):d) + '/' + (m<10?('0'+m):m) + '/' + y;
-    };
-    function myparser(s){
-            if (!s) return new Date();
-            var n = s.indexOf(",");
-            var ss;
-            var d;
-            var m;
-            var y;
-            if (n > 1) {
-                d = getDay(s);
-                m = getMonth(s)+1;
-                y = getYear(s);
-            } else {
-                var ss = (s.split('/'));
-                d = parseInt(ss[0],10);
-                m = parseInt(ss[1],10);
-                y = parseInt(ss[2],10);		
-            }
-            if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
-                return new Date(y,m-1,d);
-            } else {
-                return new Date();
-            }
-    };
-    $.extend($.fn.validatebox.defaults.rules, { 
-            validDate: {    
-                    validator: function(value){  
-                            var date = $.fn.datebox.defaults.parser(value);
-                            var s = $.fn.datebox.defaults.formatter(date);
-                            return s==value; 
-                    },  
-                    message: 'Please enter a valid date.'  
-            }
-    });    
-    $.extend($.fn.validatebox.defaults.rules, { 
-            validJF: {    
-                    validator: function(value){  
-                            if (value > 0 && value < 6 )
-                                return true; 
-                    },  
-                    message: 'Please enter a value between 1 and 5.'  
-            }
-    });     
+        return (d < 10 ? ('0' + d) : d) + '/' + (m < 10 ? ('0' + m) : m) + '/' + y;
+    }
+    ;
+    function myparser(s) {
+        if (!s)
+            return new Date();
+        var n = s.indexOf(",");
+        var ss;
+        var d;
+        var m;
+        var y;
+        if (n > 1) {
+            d = getDay(s);
+            m = getMonth(s) + 1;
+            y = getYear(s);
+        } else {
+            var ss = (s.split('/'));
+            d = parseInt(ss[0], 10);
+            m = parseInt(ss[1], 10);
+            y = parseInt(ss[2], 10);
+        }
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+            return new Date(y, m - 1, d);
+        } else {
+            return new Date();
+        }
+    }
+    ;
+    $.extend($.fn.validatebox.defaults.rules, {
+        validDate: {
+            validator: function (value) {
+                var date = $.fn.datebox.defaults.parser(value);
+                var s = $.fn.datebox.defaults.formatter(date);
+                return s == value;
+            },
+            message: 'Please enter a valid date.'
+        }
+    });
+    $.extend($.fn.validatebox.defaults.rules, {
+        validJF: {
+            validator: function (value) {
+                if (value > 0 && value < 6)
+                    return true;
+            },
+            message: 'Please enter a value between 1 and 5.'
+        }
+    });
 </script>
-<br>
-<div id="dgcontainer" style="margin-left: auto; margin-right: auto; width: 99%">
-    <table id="dg" title="Managa Analytical Data" class="easyui-datagrid" 
-           style="width:100%;height:450px;margin-left:auto;margin-right:auto;"
-           align="center"
-           url="DataController?action=listCvgData"
-           toolbar="#toolbar"
-           rownumbers="true" fitColumns="true" 
-           idField="id"
-           singleSelect="true" pagination="true">
-        <thead>
-            <tr>
-                <th field="id" width="5" align="center" hidden="true"><b>Id</b></th>
-                <th field="newsDate" formatter="formatDate"><b>News Date</b></th>
-                <th field="newspaper"><b>Newspaper</b></th>
-                <th field="language"><b>Language</b></th>
-                <th field="headline" width="50"><b>Headline</b></th>
-                <th field="edition"><b>Edition</b></th>                    
-                <th field="supplement" width="50"><b>Supplement</b></th>
-                <th field="source"><b>Source</b></th>
-                <th field="pageNo" width="35" align="right"><b>Page No</b></th>
-                <th field="height" width="35" align="right"><b>Height</b></th>
-                <th field="width" width="35" align="right"><b>Width</b></th>
-                <th field="totalArticleSize" width="50" align="right"><b>Total Article Size</b></th>
-                <th field="circulationFigure" width="50" align="right"><b>Circulation Figure</b></th>
-                <th field="quantitativeAve" width="50" align="right"><b>Quantitative AVE</b></th>
-                <th field="journalistFactor" width="50" align="right"><b>Journalist Factor</b></th>
-                <th field="imageUrl" align="center"><b>Image</b></th>
-            </tr>
-        </thead>
-    </table>        
-</div>
-<div id="toolbar">
-    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCvgData()">Add Data</a>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCvgData()">Edit Data</a>
-    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyCvgData()">Remove Data</a>
-</div>
-<div id="dlg" class="easyui-dialog" style="width:50%;height:560px;padding:10px 20px"
-     closed="true" buttons="#dlg-buttons">
-    <div class="ftitle">Manage Analytical Data</div>
-    <form id="fm" method="post" enctype="multipart/form-data" novalidate>
-        <div class="fitem" hidden="true">
-            <input name="id" class="easyui-textbox"/>
-        </div>
-        <div class="fitem">
-            <label>News Date:</label>
-            <input id="newsDate" name="newsDate" class="easyui-datebox" validType="validDate"
-                   data-options="formatter:myformatter,parser:myparser" required="true"/>
-            <label><i>(dd/mm/yyyy)</i></label>
-        </div>        
-        <div class="fitem">
-            <label>Newspaper:</label>
-            <input name="newspaper" class="easyui-textbox" style="width:300px" required="true">
-        </div>
-        <div class="fitem">
-            <label>Language:</label>
-            <input name="language" class="easyui-combobox" required="true"
-                   data-options="
-                   valueField: 'value',
-                   textField: 'value',
-                   url: 'DataController?action=getLanguages'">
-        </div>        
-        <div class="fitem">
-            <label>Headline:</label>
-            <input name="headline" class="easyui-textbox" style="width:300px" required="true">
-        </div>        
-        <div class="fitem">
-            <label>Edition</label>
-            <input name="edition" class="easyui-textbox" style="width:300px" required="true">
-        </div>
-        <div class="fitem">
-            <label>Supplement</label>
-            <input name="supplement" class="easyui-textbox" style="width:300px">
-        </div>
-        <div class="fitem">
-            <label>Source:</label>
-            <input name="source" class="easyui-textbox" style="width:300px">
-        </div>
-        <div class="fitem">
-            <label>Page No:</label>
-            <input name="pageNo" class="easyui-numberbox">
-        </div>
-        <div class="fitem">
-            <label>Height:</label>
-            <input name="height" class="easyui-numberbox">
-        </div>
-        <div class="fitem">
-            <label>Width:</label>
-            <input name="width" class="easyui-numberbox">
-        </div>
-        <div class="fitem">
-            <label>Total Article Size:</label>
-            <input name="totalArticleSize" class="easyui-numberbox">
-        </div>
-        <div class="fitem">
-            <label>Circulation Figure:</label>
-            <input name="circulationFigure" class="easyui-numberbox">
-        </div>
-        <div class="fitem">
-            <label>Quantitative AVE:</label>
-            <input name="quantitativeAve" class="easyui-numberbox" required="true"
-                   data-options="
-                   min:0,
-                   precision:2">
-        </div>
-        <div class="fitem">
-            <label>Journalist Factor:</label>
-            <input name="journalistFactor" class="easyui-numberbox" validType="validJF" required="true">
-        </div>
-        <div class="fitem">
-            <label>Image:</label>
-            <input name="image" accept="image/*" class="easyui-filebox" style="width:380px" 
-                   data-options="buttonText: 'Choose Image', buttonAlign: 'left'">
-        </div>
-    </form>
-</div>
-<div id="dlg-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCvgData()" style="width:90px">Save</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-</div>
 <jsp:include page="footer.jsp"/>

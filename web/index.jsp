@@ -4,7 +4,12 @@
     Author     : Rahul
 --%>
 <jsp:include page="header.jsp"/>
-        <br>
+<link href="css/prlogin.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    document.getElementById('navigator').style.visibility = 'hidden';
+    document.getElementById('navigator').style.height = '0px';
+</script>    
+<div id="body_container">
         <div id="login">
             <form action="LoginController" method="post" >
                 <label>login/password:</label>
@@ -19,4 +24,5 @@
             <%session.removeAttribute("error");
               }%>
         </div>
+</div>              
 <jsp:include page="footer.jsp"/>

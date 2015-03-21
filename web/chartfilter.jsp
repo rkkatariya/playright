@@ -10,8 +10,8 @@
 <link rel="stylesheet" type="text/css" href="js/easyui/themes/icon.css">
 <script type="text/javascript" src="js/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="js/easyui/jquery.easyui.min.js"></script>
-<br>
-<div class="easyui-panel" style="background-color:#3B3B3B; border: none">
+<div id="body_container">
+    <div class="easyui-panel" style="background-color:#3B3B3B; border: none">
         <div style="width:45%;margin: 0px auto;padding:10px 10px 10px 10px;">
             <form id="ff" method="POST" action="charts.jsp" target="_blank">
                 <table cellpadding="5" align="center">
@@ -34,71 +34,78 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        function submitFormAllData(){
-            document.getElementById("allData").value="Y";
-            submitForm();
-            document.getElementById("allData").value="N";
-        };
-        function submitForm(){
-            document.getElementById("ff").submit();
-        };
-        function clearForm(){
-            $('#ff').form('clear');
-        };
-    </script>
-    <script type="text/javascript">
-        function myformatter(date){
-            var y = date.getFullYear();
-            var m = date.getMonth()+1;
-            var d = date.getDate();
-            return (d<10?('0'+d):d) + '/' + (m<10?('0'+m):m) + '/' + y;
-        };
-        function myparser(s){
-            if (!s) return new Date();
-            var ss = (s.split('/'));
-            var d = parseInt(ss[0],10);
-            var m = parseInt(ss[1],10);
-            var y = parseInt(ss[2],10);	           
-            if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+</div>
+<script type="text/javascript">
+    function submitFormAllData() {
+        document.getElementById("allData").value = "Y";
+        submitForm();
+        document.getElementById("allData").value = "N";
+    }
+    ;
+    function submitForm() {
+        document.getElementById("ff").submit();
+    }
+    ;
+    function clearForm() {
+        $('#ff').form('clear');
+    }
+    ;
+</script>
+<script type="text/javascript">
+    function myformatter(date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        var d = date.getDate();
+        return (d < 10 ? ('0' + d) : d) + '/' + (m < 10 ? ('0' + m) : m) + '/' + y;
+    }
+    ;
+    function myparser(s) {
+        if (!s)
+            return new Date();
+        var ss = (s.split('/'));
+        var d = parseInt(ss[0], 10);
+        var m = parseInt(ss[1], 10);
+        var y = parseInt(ss[2], 10);
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
 //                console.log(new Date(y,m-1,d));
-                return new Date(y,m-1,d);
+            return new Date(y, m - 1, d);
+        } else {
+            return new Date();
+        }
+    }
+    ;
+    $.extend($.fn.datebox.defaults, {
+        formatter: function (date) {
+            var y = date.getFullYear();
+            var m = date.getMonth() + 1;
+            var d = date.getDate();
+            return (d < 10 ? ('0' + d) : d) + '/' + (m < 10 ? ('0' + m) : m) + '/' + y;
+        },
+        parser: function (s) {
+            if (!s)
+                return new Date();
+            var ss = s.split('/');
+            var d = parseInt(ss[0], 10);
+            var m = parseInt(ss[1], 10);
+            var y = parseInt(ss[2], 10);
+            if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
+                return new Date(y, m - 1, d);
             } else {
                 return new Date();
             }
-        };
-        $.extend($.fn.datebox.defaults, {
-            formatter: function (date) {
-                var y = date.getFullYear();
-                var m = date.getMonth() + 1;
-                var d = date.getDate();
-                return (d < 10 ? ('0' + d) : d) + '/' + (m < 10 ? ('0' + m) : m) + '/' + y;
+        }
+    });
+
+    $.extend($.fn.validatebox.defaults.rules, {
+        validDate: {
+            validator: function (value) {
+                var date = $.fn.datebox.defaults.parser(value);
+                var s = $.fn.datebox.defaults.formatter(date);
+                return s == value;
             },
-            parser: function (s) {
-                if (!s)
-                    return new Date();
-                var ss = s.split('/');
-                var d = parseInt(ss[0], 10);
-                var m = parseInt(ss[1], 10);
-                var y = parseInt(ss[2], 10);
-                if (!isNaN(y) && !isNaN(m) && !isNaN(d)) {
-                    return new Date(y, m - 1, d);
-                } else {
-                    return new Date();
-                }
-            }
-        });
-        
-        $.extend($.fn.validatebox.defaults.rules, { 
-            validDate: {    
-                    validator: function(value){  
-                        var date = $.fn.datebox.defaults.parser(value);
-                        var s = $.fn.datebox.defaults.formatter(date);
-                        return s==value; 
-                    },  
-                    message: 'Please enter a valid date.'  
-            }
-        });    
-    </script>
-    <jsp:include page="footer.jsp"/>
+            message: 'Please enter a valid date.'
+        }
+    });
+</script>
+<jsp:include page="footer.jsp"/>
 

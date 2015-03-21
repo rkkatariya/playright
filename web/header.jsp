@@ -9,23 +9,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <title>Playright Analytics</title>
-        <link href="css/tmstyle.css" rel="stylesheet" type="text/css" />
+        <link href="css/prstyle.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <div id="header_container">
             <div id="header">
-                <a href="index.jsp"><img src="images/logo.png" alt="Playright Analytics" title="Playright Analytics" border="0" /></a>
+                <a href="index.jsp" style="text-align: left; float: left;"><img id="imgl" src="images/logo.png" alt="Playright Analytics" title="Playright Analytics" border="0" /></a>
+                <a href="index.jsp" style="text-align: right; float: right;"><img id="imgr" src="images/rcb.png" alt="Royal Challengers Bangalore" title="Royal Challengers Bangalore" border="0" /></a>
             </div>
-        </div>
-        <div id="navigator">
-            <table width="60%" align="center">
-                <tbody>
-                    <tr>
-                        <td><h2><a href="data.jsp">Data</a></h2></td>
-                        <td><h2><a href="keywords.jsp">Keywords</a></h2></td>
-                        <td><h2><a href="chartfilter.jsp">Charts</a></h2></td>
-                        <td><h2><a href="email.jsp">Emails</a></h2></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div id="line"></div>
+            <div id="navigator">
+                <table width="60%" align="center">
+                    <tbody>
+                        <tr>
+                            <td><h2><a href="data.jsp">Data</a></h2></td>
+                            <td><h2><a href="keywords.jsp">Keywords</a></h2></td>
+                            <td><h2><a href="chartfilter.jsp">Charts</a></h2></td>                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
