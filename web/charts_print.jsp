@@ -8,7 +8,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
         <title>Playright Analytics</title>
-        <link href="css/prchart.css" rel="stylesheet" type="text/css" />
+        <link href="css/prchart_print.css" rel="stylesheet" type="text/css" />
         <!--Load the Ajax API-->
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -17,9 +17,6 @@
             var toDate = '<%= request.getParameter("toDate")%>';
             var allData = '<%= request.getParameter("allData")%>';
             var params = 'fromDate=' + fromDate + '&toDate=' + toDate + '&allData=' + allData;
-            function printableVersion() {
-                document.getElementById('printbtn').href='charts_print.jsp?' + params;
-            };
             // Load the Visualization API and the piechart package.
             google.load('visualization', '1', {'packages': ['corechart']});
 //            google.load("visualization", "1.1", {packages:['bar']});
@@ -62,10 +59,10 @@
                         fontSize: 20,
                         bold: true
                     },
-//                    width: 400,
-//                    height: 240,
+                    width: 400,
+                    height: 240,
                     is3D: true,
-                    backgroundColor: '#ecf0f1',
+                    backgroundColor: '#FFFFFF',
                     legend: {
                         position: 'labeled',
                         textStyle: {
@@ -99,8 +96,8 @@
                         '#000099','#0000CC','#000066',
                         '#333399','#3333FF','#3333CC',
                         '#3333CC'],
-//                    width: 400,
-//                    height: 240,
+                    width: 400,
+                    height: 240,
                     is3D: true,
                     //            animation: {
                     //                startup: true,
@@ -112,7 +109,7 @@
                         fontSize: 20,
                         bold: true
                     },
-                    backgroundColor: '#ecf0f1',
+                    backgroundColor: '#FFFFFF',
                     legend: {
                         textStyle: {
                             color: '#444444'     // The color of the text.
@@ -154,8 +151,8 @@
                         '#000099','#0000CC','#000066',
                         '#333399','#3333FF','#3333CC',
                         '#3333CC'],
-//                    width: 800,
-//                    height: 240,
+                    width: 800,
+                    height: 240,
                     is3D: true,
                     //            animation: {
                     //                startup: true,
@@ -167,7 +164,7 @@
                         fontSize: 20,
                         bold: true
                     },
-                    backgroundColor: '#ecf0f1',
+                    backgroundColor: '#FFFFFF',
                     legend: {
                         textStyle: {
                             color: '#444444'     // The color of the text.
@@ -215,10 +212,10 @@
                         fontSize: 20,
                         bold: true
                     },
-//                    width: 400,
-//                    height: 240,
+                    width: 400,
+                    height: 240,
                     is3D: true,
-                    backgroundColor: '#ecf0f1',
+                    backgroundColor: '#FFFFFF',
                     legend: {
                         position: 'labeled',
                         textStyle: {
@@ -252,8 +249,8 @@
                         '#000099','#0000CC','#000066',
                         '#333399','#3333FF','#3333CC',
                         '#3333CC'],
-//                    width: 400,
-//                    height: 240,
+                    width: 400,
+                    height: 240,
                     is3D: true,
                     //            animation: {
                     //                startup: true,
@@ -265,7 +262,7 @@
                         fontSize: 20,
                         bold: true
                     },
-                    backgroundColor: '#ecf0f1',
+                    backgroundColor: '#FFFFFF',
                     legend: {
                         textStyle: {
                             color: '#444444'     // The color of the text.
@@ -296,6 +293,8 @@
 //                chart.draw(data, google.charts.Bar.convertOptions(options));
             }
         </script>
+        <script type="text/javascript">
+        </script>
     </head>
     <body>
         <div id="header_container">
@@ -307,16 +306,15 @@
         <div id="body_container">
             <div class="printbutton">
                 <div class="innerdivf">
-                    <a id="printbtn" href="javascript:void(0)" onclick="printableVersion()">Click here to view Printable Version</a>
-                    <!--<button id="printbtn" name="print" onclick="printableVersion();">Printable Version</button>-->
+                    <button id="print" name="print" onclick="window.print();">Print</button>
                 </div>        
             </div>          
             <div class="rowdivtitle">
                 <div class="innerdivl">
-                    <h>City Breakup</h>
+                    <div id="titlel">City Breakup</div>
                 </div>
                 <div class="innerdivr">
-                    <h>Language Breakup</h>
+                    <div id="titler">Language Breakup</div>
                 </div>
             </div>            
             <div class="rowdiv">
@@ -354,14 +352,14 @@
                 </div>        
             </div>
             <div class="rowdivtitle">
-                <div class="innerdivf" style="padding: 20px 0 10px 0">
+                <div class="innerdivf" style="padding: 0 0 10px 0">
                     <ul>
                         <li style="padding: 0 0 10px 0">The Total Value is .......</li>
                         <li style="padding: 0 0 10px 0">The Circulation Figure is .......</li>
                         <li style="padding: 0 0 10px 0">Top 3 cities of coverage are ......., ........ and  .........</li>
                     </ul>
                 </div>        
-            </div>            
+            </div>
         </div>
         <div id="footer_container">
             <div id="footer">

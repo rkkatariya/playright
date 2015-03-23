@@ -8,6 +8,7 @@ package com.playright.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,4 +65,12 @@ public class UserDao {
         }
         return result;
     }
+    
+    public void close() {
+        try {
+            dbConnection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ChartDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }    
 }

@@ -22,9 +22,11 @@
                 <table width="60%" align="center">
                     <tbody>
                         <tr>
-                            <td><h2><a href="data.jsp">Data</a></h2></td>
+                            <td><h2><a href="secured/data.jsp">Data</a></h2></td>
                             <td><h2><a href="keywords.jsp">Keywords</a></h2></td>
-                            <td><h2><a href="chartfilter.jsp">Charts</a></h2></td>                        </tr>
+                            <td><h2><a href="chartfilter.jsp">Charts</a></h2></td>
+                            <td><h2><a href="../login?action=logout">Logout</a></h2></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -53,29 +53,29 @@ public class ChartDao {
         String query = null;
         ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
         if ("citywisesplit".equalsIgnoreCase(chart)) {
-            query = addDateFilter("select edition, count(*) as acticles "
+            query = addDateFilter("select edition, count(*) as articles "
                     + "from pr_cvg_data group by edition", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("edition", ValueType.TEXT, "City"));
-            cd.add(new ColumnDescription("acticles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
         } else if ("languagewisesplit".equals(chart)) {
-            query = addDateFilter("select language, count(*) as acticles "
+            query = addDateFilter("select language, count(*) as articles "
                     + "from pr_cvg_data group by language", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("language", ValueType.TEXT, "Language"));
-            cd.add(new ColumnDescription("acticles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
         } else if ("newspaperwisesplit".equals(chart)) {
-            query = addDateFilter("select newspaper, count(*) as acticles "
+            query = addDateFilter("select newspaper, count(*) as articles "
                     + "from pr_cvg_data group by newspaper", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("newspaper", ValueType.TEXT, "Newspaper"));
-            cd.add(new ColumnDescription("acticles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
         } else if ("journalfactorsplit".equals(chart)) {
-            query = addDateFilter("select journalist_factor, count(*) as acticles "
+            query = addDateFilter("select journalist_factor, count(*) as articles "
                     + "from pr_cvg_data group by journalist_factor", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("journalfact", ValueType.TEXT, "Joutnalist Factor"));
-            cd.add(new ColumnDescription("acticles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
         } else if ("cfvaluebar".equals(chart)) {
             query = "select em.Commodity as keyword, round(sum(\n" +
                     "(em.Headline * (select value from pr_settings where name = 'FACTOR_HEADLINE' and status = 'A') +\n" +
