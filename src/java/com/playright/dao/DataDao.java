@@ -259,14 +259,25 @@ public class DataDao {
             } else {
                 ps.setBigDecimal(12, cd.getQuantitativeAve());
             }
-            ps.setString(13, cd.getImageExists());
+            
+            if (cd.getImageExists() == null) {
+                ps.setString(13, "N");
+            } else {
+                ps.setString(13, cd.getImageExists());
+            }
+            
             if (cd.getJournalistFactor() == null) {
                 ps.setInt(14, 1);
             } else {
                 ps.setInt(14, cd.getJournalistFactor());
             }
             ps.setString(15, cd.getLanguage());
-            if ("Y".equalsIgnoreCase(cd.getImageExists())) {
+//            if ("Y".equalsIgnoreCase(cd.getImageExists())) {
+//                ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
+//            } else {
+//                ps.setBinaryStream(16, null);
+//            }
+            if (cd.getImageBlob() != null) {
                 ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
             } else {
                 ps.setBinaryStream(16, null);
@@ -278,7 +289,7 @@ public class DataDao {
     }
 
     public void updateCoverageData(CoverageData cd) {
-        String imageExists = getCoverageDataById(cd.getId()).getImageExists();
+        //String imageExists = getCoverageDataById(cd.getId()).getImageExists();
         try {
             PreparedStatement ps
                     = connection.prepareStatement("update pr_cvg_data set News_Date=?, "
@@ -322,19 +333,31 @@ public class DataDao {
             } else {
                 ps.setBigDecimal(12, cd.getQuantitativeAve());
             }
-            if ("Y".equalsIgnoreCase(imageExists) 
-                    || "Y".equalsIgnoreCase(cd.getImageExists())) {
-                ps.setString(13, "Y");
-            } else {
+            
+            if (cd.getImageExists() == null) {
                 ps.setString(13, "N");
+            } else {
+                ps.setString(13, cd.getImageExists());
             }
+            
+//            if ("Y".equalsIgnoreCase(imageExists) 
+//                    || "Y".equalsIgnoreCase(cd.getImageExists())) {
+//                ps.setString(13, "Y");
+//            } else {
+//                ps.setString(13, "N");
+//            }
             if (cd.getJournalistFactor() == null) {
                 ps.setInt(14, 1);
             } else {
                 ps.setInt(14, cd.getJournalistFactor());
             }
             ps.setString(15, cd.getLanguage());
-            if ("Y".equalsIgnoreCase(cd.getImageExists())) {
+//            if ("Y".equalsIgnoreCase(cd.getImageExists())) {
+//                ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
+//            } else {
+//                ps.setBinaryStream(16, null);
+//            }
+            if (cd.getImageBlob() != null) {
                 ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
             } else {
                 ps.setBinaryStream(16, null);

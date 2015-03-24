@@ -92,15 +92,15 @@ public class EmailServlet extends HttpServlet {
             try {
                 // inline images
                 Map<String, String> inlineImages = new HashMap<String, String>();
-                String img_0_0_1 = getClass().getResource("conceptHeader.png").getFile();
+                String img_0_0_2 = getClass().getResource("rcb.png").getFile();
+                inlineImages.put("img_0_0_2",
+                        img_0_0_2);
+                String img_0_0_1 = getClass().getResource("playright.png").getFile();
                 inlineImages.put("img_0_0_1",
                         img_0_0_1);
-                String img_0_0_2 = getClass().getResource("empowerment.jpg").getFile();
-                //inlineImages.put("img_0_0_2",
-                //        img_0_0_2);
-                //String img_0_0_3 = getClass().getResource("conceptFooter.gif").getFile();
-                //inlineImages.put("img_0_0_3",
-                //        img_0_0_3);
+                String img_0_0_3 = getClass().getResource("revvster.png").getFile();
+                inlineImages.put("img_0_0_3",
+                        img_0_0_3);
                 emailDao.sendHTMLMail(fromDate, toDate, recipientMailAddress, emailSubject, imageLink, inlineImages);
             } catch (Exception ex) {
                  Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);

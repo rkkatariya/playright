@@ -5,6 +5,7 @@
 --%>
 
 <!DOCTYPE html>
+<jsp:include page="header.jsp"/> 
 <script type="text/javascript" src="../js/jquery.modal.js"></script>
 <div id="body_container">   
     <div style="width:60%;margin: 0px auto;padding:10px">

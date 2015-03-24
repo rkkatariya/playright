@@ -36,6 +36,7 @@
                     <th field="circulationFigure" width="50" align="right"><b>Circulation Figure</b></th>
                     <th field="quantitativeAve" width="50" align="right"><b>Quantitative AVE</b></th>
                     <th field="journalistFactor" width="50" align="right"><b>Journalist Factor</b></th>
+                    <th field="imageExists" align="center"><b>Image Exists</b></th>
                     <th field="imageUrl" align="center"><b>Image</b></th>
                 </tr>
             </thead>
@@ -46,7 +47,7 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editCvgData()">Edit Data</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyCvgData()">Remove Data</a>
     </div>
-    <div id="dlg" class="easyui-dialog" style="width:50%;height:560px;padding:10px 20px"
+    <div id="dlg" class="easyui-dialog" style="width:50%;height:585px;padding:10px 20px"
          closed="true" buttons="#dlg-buttons">
         <div class="ftitle">Manage Analytical Data</div>
         <form id="fm" method="post" enctype="multipart/form-data" novalidate>
@@ -76,16 +77,16 @@
                 <input name="headline" class="easyui-textbox" style="width:300px" required="true">
             </div>        
             <div class="fitem">
-                <label>Edition</label>
+                <label>Edition:</label>
                 <input name="edition" class="easyui-textbox" style="width:300px" required="true">
             </div>
             <div class="fitem">
-                <label>Supplement</label>
+                <label>Supplement:</label>
                 <input name="supplement" class="easyui-textbox" style="width:300px">
             </div>
             <div class="fitem">
                 <label>Source:</label>
-                <input name="source" class="easyui-textbox" style="width:300px">
+                <input name="source" class="easyui-textbox" style="width:300px" required="true">
             </div>
             <div class="fitem">
                 <label>Page No:</label>
@@ -109,14 +110,19 @@
             </div>
             <div class="fitem">
                 <label>Quantitative AVE:</label>
-                <input name="quantitativeAve" class="easyui-numberbox" required="true"
+                <input name="quantitativeAve" class="easyui-numberbox"
                        data-options="
                        min:0,
                        precision:2">
             </div>
             <div class="fitem">
                 <label>Journalist Factor:</label>
-                <input name="journalistFactor" class="easyui-numberbox" validType="validJF" required="true">
+                <input name="journalistFactor" class="easyui-numberbox" validType="validJF">
+            </div>
+            <div style="height: 22px; margin-bottom: 5px">
+                <label style="display: inline-block; width: 25%;">Image Exists:</label>
+                <input type="radio" name="imageExists" value="Y">Yes
+                <input type="radio" name="imageExists" value="N">No
             </div>
             <div class="fitem">
                 <label>Image:</label>
@@ -152,6 +158,9 @@
     .fitem input{
         width:160px;
     }
+    .fitem a label {
+        width: 100%;
+    }    
 </style>
 <script type="text/javascript">
     var url;

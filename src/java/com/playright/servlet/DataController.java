@@ -247,6 +247,10 @@ public class DataController extends HttpServlet {
                     request.getParameter("quantitativeAve") != null) {
                 cd.setQuantitativeAve(new BigDecimal(request.getParameter("quantitativeAve")));
             }
+            if (!"".equalsIgnoreCase(request.getParameter("imageExists")) && 
+                    request.getParameter("imageExists") != null) {
+                cd.setImageExists(request.getParameter("imageExists"));
+            }
             Blob b = null;
             try {
                 Part filePart = request.getPart("image");
@@ -256,12 +260,12 @@ public class DataController extends HttpServlet {
             } catch (IOException ex) {
                 Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (b != null && b.length() != 0) {
-                cd.setImageExists("Y");
-                cd.setImageBlob(b);
-            } else {
-                cd.setImageExists("N");
-            }
+//            if (b != null && b.length() != 0) {
+//                cd.setImageExists("Y");
+//                cd.setImageBlob(b);
+//            } else {
+//                cd.setImageExists("N");
+//            }
         } catch (ParseException ex) {
             Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

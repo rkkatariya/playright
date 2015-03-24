@@ -17,9 +17,44 @@ and open the template in the editor.
 
 #login form input{width:135px; height:18px; float:left; display:block; margin:28px 25px 0 0; padding:0 0 0 10px;}
 
-#login form input.botton{width:56px; height:28px; float:left; background:url(../images/button1.gif) 0 0 no-repeat ; border:none; color:#FFFFFF; font:14px/28px Verdana, Arial, Helvetica, sans-serif; margin:26px 0 0; padding:0px;}
+/*#login form input.botton{width:56px; height:28px; float:left; background:url(../images/button1.gif) 0 0 no-repeat ; border:none; color:#FFFFFF; font:14px/28px Verdana, Arial, Helvetica, sans-serif; margin:26px 0 0; padding:0px;}*/
 
 #loginerror{text-align: center; width:602px; position:relative; margin:0 auto; padding:0 88px; clear:both;}
 
 #loginerror h2{margin:0 auto; padding:20px 0 0 0; width:400px; height:88px; display:block; color:#c0392b; font:18px/28px Verdana, Arial, Helvetica, sans-serif; font-weight:normal;}
 /*----Login----*/
+
+#login form input.button {
+        width:56px; height:28px; float:left;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c03a2b), color-stop(1, #e74d3c));
+	background:-moz-linear-gradient(top, #c03a2b 5%, #e74d3c 100%);
+	background:-webkit-linear-gradient(top, #c03a2b 5%, #e74d3c 100%);
+	background:-o-linear-gradient(top, #c03a2b 5%, #e74d3c 100%);
+	background:-ms-linear-gradient(top, #c03a2b 5%, #e74d3c 100%);
+	background:linear-gradient(to bottom, #c03a2b 5%, #e74d3c 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c03a2b', endColorstr='#e74d3c',GradientType=0);
+	background-color:#c03a2b;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #d02718;
+	display:inline-block;
+	cursor:pointer;
+	color:#ecf0f1;
+	font:14px/28px Verdana, Arial, Helvetica, sans-serif; margin:26px 0 0; padding:0 0 0 0;
+	text-decoration:none;
+}
+#login form input.button:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #e74d3c), color-stop(1, #c03a2b));
+	background:-moz-linear-gradient(top, #e74d3c 5%, #c03a2b 100%);
+	background:-webkit-linear-gradient(top, #e74d3c 5%, #c03a2b 100%);
+	background:-o-linear-gradient(top, #e74d3c 5%, #c03a2b 100%);
+	background:-ms-linear-gradient(top, #e74d3c 5%, #c03a2b 100%);
+	background:linear-gradient(to bottom, #e74d3c 5%, #c03a2b 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e74d3c', endColorstr='#c03a2b',GradientType=0);
+	background-color:#e74d3c;
+}
+#login form input.button:active {
+	position:relative;
+	top:1px;
+}

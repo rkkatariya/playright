@@ -21,7 +21,7 @@ if (request.getSession().getAttribute("user") != null) {
                 <label>Login/Password:</label>
                 <input name="userid" type="text" id="userid" value="" />
                 <input name="password" type="password" id="password" value="" />
-                <input name="login" type="submit" class="botton" value="GO" />
+                <input name="login" type="submit" class="button" value="Go" />
             </form>
         </div>
         <div id="loginerror">
