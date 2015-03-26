@@ -8,24 +8,27 @@ and open the template in the editor.
     Author     : Rahul
 */
 /* CSS Document */
-body {overflow-x: hidden; background-color:#ecf0f1; padding:0px; margin:0px; font:17px/17px Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
+body {overflow-x: hidden; background-color:#ecf0f1; padding:0px; margin:0px; color: #2c3e50; 
+      font:17px/17px Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
 div, ul, li, h1, h2, h3, h4, p, img{margin:0px; padding:0px;}
 ul{list-style-type:none;}
-#header_container{border-bottom:7px solid #c0392b; left:0; height:96px; padding:0px; top: 0;}
-#header{height:86px; width: 100%; margin:0 auto; padding:0px 9px 0px 14px;}
+#header_container{border-bottom:7px solid #e74c3c; left:0; padding:3px 0; top: 0;}
+#header{height:86px; width: 100%; margin:0 auto; padding:0;}
 #header img{height:86px; position:relative; top:0; padding:0 30px 0 20px; margin:0 auto;}
-#body_container {overflow:auto; padding:0px 0 0px 0; }
-#footer_container{border-top: 2px solid red;height:45px; padding:30px; bottom:0; left:0; }
+#body_container {padding:0; margin: 0 auto; left:0;}
+#footer_container{border-top: 2px solid red;height:45px; padding:6px; bottom:0; left:0; }
 #footer{width:100%; height:43px; position:relative; margin:0 auto;}
-#footer img{float: right; height:36px; width:101px; bottom: 0; padding:4px 0;}
-.rowdiv{height: 300px; text-align: center; margin:0 auto; }
-.innerdivl{color: #2c3e50; float: left; width: 45%; text-align: center; padding: 0 0 3px 0; }
-.innerdivr{color: #2c3e50; float: right; width: 45%; text-align: center; padding: 0 0 3px 0; }    
-.innerdivf{color: #2c3e50; position: relative; width: 90%; text-align: center; padding: 0 0 3px 0; margin:0 auto;} 
-.printbutton{height:60px; padding: 10px 0 10px 0;}
-#citywise_div{float: right; width: 90%; height: 250px;}
-#journalfact_div{float: right; width: 90%; height: 250px;}
-#langwise_div{float: left; width: 90%; height: 250px;}
-#circfig_div{float: left; width: 90%; min-height: 250px;}
-#newspaperwise_div{height: 290px;}
+#footer img{float: left; height:36px; width:101px; bottom: 0; padding:4px 30px 0 0;}
+.rowdiv{height: 240px; text-align: center; margin:0 auto; }
+.innerdivl{color: #2c3e50; float: left; width: 50%; text-align: center; padding: 0 0 3px 0; }
+.innerdivr{color: #2c3e50; float: right; width: 50%; text-align: center; padding: 0 0 3px 0; }    
+.innerdivf{color: #2c3e50; position: relative; width: 100%; text-align: center; padding: 0 0 3px 0; margin:0 auto;} 
+.printbutton{height:20px; padding: 10px 0 10px 0;}
+.rowdivtitle{height: 55px; text-align: center; margin:0 auto; }
+#citywise_div{float: right; width: 95%; height: 240px;}
+#journalfact_div{float: right; width: 95%; height: 240px;}
+#topenglish_div{float: right; width: 95%; height: 240px;}
+#langwise_div{float: left; width: 95%; height: 240px;}
+#circfig_div{float: left; width: 95%; min-height: 240px;}
+#topvernacular_div{float: left; width: 95%; height: 240px;}
 #printbtn{font-weight:bold; text-align:center; text-decoration:none;  display:block; color:RED;}

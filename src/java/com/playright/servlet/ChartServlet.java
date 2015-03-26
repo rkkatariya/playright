@@ -14,6 +14,7 @@ import com.google.visualization.datasource.query.Query;
 import com.playright.dao.ChartDao;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  * @author Rahul
  */
 public class ChartServlet extends HttpServlet implements DataTableGenerator {
-    
+
     private static final long serialVersionUID = 1L;
 
     private static final Log log = LogFactory.getLog(ChartServlet.class.getName());
@@ -66,7 +67,7 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
             out.close();
         }
     }
-    
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -80,8 +81,36 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
             throws ServletException, IOException {
 //        processRequest(request, response);
         String chart = request.getParameter("chart");
-        if (chart != null) { 
+        if (chart != null) {
             DataSourceHelper.executeDataSourceServletFlow(request, response, this, true);
+        } else {
+            String action = request.getParameter("action");
+            if (action != null) {
+                String output = "";
+                ChartDao chartDao = new ChartDao();
+                try {
+                    if ("getTotalPRValue".equals(action)) {
+                        String fromDate = request.getParameter("fromDate");
+                        String toDate = request.getParameter("toDate");
+                        String allData = request.getParameter("allData");
+                        String fromDateSql = "";
+                        String toDateSql = "";
+                        if (!"Y".equals(allData)) {
+                            fromDateSql = getValidMySQLDate("dd/MM/yyyy", fromDate);
+                            toDateSql = getValidMySQLDate("dd/MM/yyyy", toDate);
+                        }
+                        output = chartDao.getTotalPRValue(fromDateSql, toDateSql, allData);
+                    } else if ("getMinMaxDateStr".equals(action)) {
+                        output = chartDao.getMixMaxDateStr();
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    chartDao.close();
+                }
+                response.setContentType("text/html");
+                response.getWriter().write(output);
+            }
         }
     }
 
@@ -109,7 +138,7 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>    
-    
+
     /**
      * The SQL predefined capabilities set is a special custom set for SQL
      * databases. This implements most of the data source capabilities more
@@ -123,40 +152,44 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
     @Override
     public DataTable generateDataTable(Query query, HttpServletRequest request)
             throws DataSourceException {
-        
+
         ChartDao chartDao = new ChartDao();
-        Date today = Calendar.getInstance().getTime();
-        SimpleDateFormat sdfIn = new SimpleDateFormat("dd/MM/yyyy");
         //Needed for mySQL
-        SimpleDateFormat sdfSql = new SimpleDateFormat("yyyy-MM-dd");
         String fromDate = request.getParameter("fromDate");
         String toDate = request.getParameter("toDate");
         String allData = request.getParameter("allData");
         String fromDateSql = "";
         String toDateSql = "";
-        try {
-            if (fromDate == null || "".equals(fromDate)) {
-                fromDateSql = sdfSql.format(today);
-            } else {
-                fromDateSql = sdfSql.format(sdfIn.parse(fromDate));
-            }
-            if (toDate == null || "".equals(toDate)) {
-                toDateSql = sdfSql.format(today);
-            } else {
-                toDateSql = sdfSql.format(sdfIn.parse(toDate));
-            }
-        } catch (ParseException ex) {
-                Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (!"Y".equals(allData)) {
+            fromDateSql = getValidMySQLDate("dd/MM/yyyy", fromDate);
+            toDateSql = getValidMySQLDate("dd/MM/yyyy", toDate);
+        }
         return chartDao.getDataTable(request.getParameter("chart"), fromDateSql, toDateSql, allData);
     }
+
+    private void forwardToPage(final HttpServletRequest request,
+            final HttpServletResponse response,
+            String url)
+            throws IOException, ServletException {
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);
+        dispatcher.forward(request, response);
+    }
     
-    private void forwardToPage(final HttpServletRequest request, 
-                               final HttpServletResponse response,
-                               String url) 
-    throws IOException, ServletException {
-      RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(url);
-      dispatcher.forward(request,response);
-    }    
+    private static String getValidMySQLDate(String inSdf, String inDate) {
+        String dateSql = "";
+        SimpleDateFormat sdfIn = new SimpleDateFormat(inSdf);
+        //Needed for mySQL
+        SimpleDateFormat sdfSql = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            if (inDate == null || "".equals(inDate)) {
+                dateSql = sdfSql.format(Calendar.getInstance().getTime());
+            } else {
+                dateSql = sdfSql.format(sdfIn.parse(inDate));
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return dateSql;
+    }
 
 }

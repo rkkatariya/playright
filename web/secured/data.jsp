@@ -29,6 +29,7 @@
                     <th field="edition"><b>Edition</b></th>                    
                     <th field="supplement" width="50"><b>Supplement</b></th>
                     <th field="source"><b>Source</b></th>
+                    <th field="imageExists" align="center"><b>Image Exists</b></th>                    
                     <th field="pageNo" width="35" align="right"><b>Page No</b></th>
                     <th field="height" width="35" align="right"><b>Height</b></th>
                     <th field="width" width="35" align="right"><b>Width</b></th>
@@ -36,7 +37,6 @@
                     <th field="circulationFigure" width="50" align="right"><b>Circulation Figure</b></th>
                     <th field="quantitativeAve" width="50" align="right"><b>Quantitative AVE</b></th>
                     <th field="journalistFactor" width="50" align="right"><b>Journalist Factor</b></th>
-                    <th field="imageExists" align="center"><b>Image Exists</b></th>
                     <th field="imageUrl" align="center"><b>Image</b></th>
                 </tr>
             </thead>
@@ -88,6 +88,11 @@
                 <label>Source:</label>
                 <input name="source" class="easyui-textbox" style="width:300px" required="true">
             </div>
+            <div style="height: 22px; margin-bottom: 5px">
+                <label style="display: inline-block; width: 25%;">Image Exists:</label>
+                <input type="radio" name="imageExists" value="Y">Yes
+                <input type="radio" name="imageExists" value="N">No
+            </div>
             <div class="fitem">
                 <label>Page No:</label>
                 <input name="pageNo" class="easyui-numberbox">
@@ -118,11 +123,6 @@
             <div class="fitem">
                 <label>Journalist Factor:</label>
                 <input name="journalistFactor" class="easyui-numberbox" validType="validJF">
-            </div>
-            <div style="height: 22px; margin-bottom: 5px">
-                <label style="display: inline-block; width: 25%;">Image Exists:</label>
-                <input type="radio" name="imageExists" value="Y">Yes
-                <input type="radio" name="imageExists" value="N">No
             </div>
             <div class="fitem">
                 <label>Image:</label>

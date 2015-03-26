@@ -126,7 +126,7 @@ public class DataController extends HttpServlet {
                     int stPgIdx = Integer.parseInt(request.getParameter("page"));
                     int recPerPg = Integer.parseInt(request.getParameter("rows"));
                     data = dataDao.getPaginatedCoverageData(stPgIdx, recPerPg);
-                    int dataCount = dataDao.getTableSize("PR_CVG_DATA");
+                    int dataCount = dataDao.getTableSize("pr_cvg_data");
 
                     // Convert Java Object to Json
                     String jsonArray = gson.toJson(data);

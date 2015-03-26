@@ -43,8 +43,11 @@ public class DBUtility {
         Context initContext = new InitialContext();
         //this is needed for tomcat
 //        Context envContext = (Context) initContext.lookup("java:/comp/env");
+//        DataSource ds = (DataSource) envContext.lookup("playRightAnalyticsPool");
+        
         //this is for glass fish
-        DataSource ds = (DataSource) initContext.lookup("jdbc/playright");
+        DataSource ds = (DataSource) initContext.lookup("jdbc/playRightAnalyticsDS");        
+        
         Connection conn = ds.getConnection();
         return conn;
     }

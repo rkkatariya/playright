@@ -10,7 +10,7 @@
 <div id="body_container">   
     <div style="width:60%;margin: 0px auto;padding:10px">
         <div class="easyui-panel" title="Use Date Filter" 
-         style="background-color:#bdc3c7; padding: 20px 10px 5px 10px;">
+             style="background-color:#bdc3c7; padding: 20px 10px 5px 10px;">
             <form id="ff" method="POST" target="_blank">
                 <table cellpadding="5" align="center">
                     <tr>
@@ -30,11 +30,12 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="showModal('CHARTS')">Email Charts</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="showModal('HTML')">Email Data</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">Clear Dates</a>
+                <!--<a href="javascript:void(0)" class="easyui-linkbutton" onclick="downloadAsCSV()">Download Data</a>-->
             </div>
         </div>
 
         <div class="easyui-panel" title="Use Entire Data" 
-         style="background-color:#bdc3c7; padding: 10px 10px 5px 10px;">
+             style="background-color:#bdc3c7; padding: 10px 10px 5px 10px;">
             <div style="text-align:center;padding:20px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="generateChartsAllData('../charts_print.jsp')">Print Charts</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="generateChartsAllData('../charts.jsp')">View Charts</a>
@@ -77,47 +78,57 @@
     }
     ;
     function generateCharts(action) {
-        document.getElementById("ff").action=action;
+        document.getElementById("ff").action = action;
         document.getElementById("ff").submit();
     }
     ;
     function showModal(action) {
         window.action = action;
-    if(action === 'CHARTS'){
-        $('#mailContent').show();
-    } else {
-        $('#mailContent').hide();
-    }   
-    $("#emailDialog").modal({
-        escapeClose: false,
-        clickClose: false,
-        showClose: false
-    });
+        if (action === 'CHARTS') {
+            $('#mailContent').show();
+        } else {
+            $('#mailContent').hide();
+        }
+        $("#emailDialog").modal({
+            escapeClose: false,
+            clickClose: false,
+            showClose: false
+        });
     }
     ;
-    
-    function sendMail(){
-      
-      var fromDate = $('input[name="fromDate"]').val();
-      var toDate = $('input[name="toDate"]').val();
-      var postData = $('#mailpopup').serializeArray();
-      
-      $.ajax({
-          url:'EmailServlet?action='+window.action+"&fromDate="+fromDate+"&toDate="+toDate,
-          type:'POST',
-          data:postData
-      }).success(function(){
-          $.modal.close();
-      }).error(function(){
-          $.messager.show({
+
+    function sendMail() {
+
+        var fromDate = $('input[name="fromDate"]').val();
+        var toDate = $('input[name="toDate"]').val();
+        var postData = $('#mailpopup').serializeArray();
+
+        $.ajax({
+            url: 'EmailServlet?action=' + window.action + "&fromDate=" + fromDate + "&toDate=" + toDate,
+            type: 'POST',
+            data: postData
+        }).success(function () {
+            $.modal.close();
+        }).error(function () {
+            $.messager.show({
                 title: 'Error',
                 msg: 'Unable to send email'
             });
-      });
-    };
-    
+        });
+    }
+    ;
+
     function clearForm() {
         $('#ff').form('clear');
+    }
+    ;
+    function downloadAsCSV() {
+        var fromDate = $('input[name="fromDate"]').val();
+        var toDate = $('input[name="toDate"]').val();
+        document.getElementById("ff").action = '/playright/CSVServlet?fromDate=' + fromDate + '&toDate=' + toDate;
+        document.getElementById("ff").method = 'GET';
+        document.getElementById("ff").submit();
+        document.getElementById("ff").action = 'charts.jsp';
     }
     ;
 </script>

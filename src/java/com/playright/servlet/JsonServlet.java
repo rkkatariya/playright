@@ -111,7 +111,7 @@ public class JsonServlet extends HttpServlet {
                 try {
                     DataDao dataDao = new DataDao();
                     data = dataDao.getAllCoverageData();
-                    int dataCount = dataDao.getTableSize("PR_CVG_DATA");
+                    int dataCount = dataDao.getTableSize("pr_cvg_data");
 
                     // Convert Java Object to Json
                     String jsonArray = gson.toJson(data);

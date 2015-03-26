@@ -45,7 +45,7 @@ public class DataDao {
     public CoverageData getCoverageDataById(Integer id) {
         CoverageData cd = new CoverageData();
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM PR_CVG_DATA  WHERE ID = ?");
+            PreparedStatement ps = connection.prepareStatement("select * from pr_cvg_data  where id = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -60,7 +60,7 @@ public class DataDao {
     public EntityMatrix getEntityMatrixById(Integer id) {
         EntityMatrix em = new EntityMatrix();
         try {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM PR_ENTITY_MATRIX WHERE ID = ?");
+            PreparedStatement ps = connection.prepareStatement("select * from pr_entity_matrix where id = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -74,11 +74,11 @@ public class DataDao {
 
     public ArrayList<EntityMatrix> getEntityMatrixByCvgDataId(Integer cvgDataId) {
         ArrayList<EntityMatrix> list = new ArrayList<EntityMatrix>();
-        String query = new String("select em.id, k.keyword, em.Headline, em.image, " + 
+        String query = new String("select em.id, k.keyword, em.headline, em.image, " + 
                                 "em.article, " + cvgDataId + " as pr_cvg_data_id " + 
                                 "from pr_keyword k left join (select * from " + 
                                 "pr_entity_matrix where pr_cvg_data_id = ?) em " +
-                                "on k.keyword = em.Commodity " +
+                                "on k.keyword = em.commodity " +
                                 "where k.is_deleted = 'N'");
         try {
             PreparedStatement ps = connection.prepareCall(query);
@@ -98,11 +98,11 @@ public class DataDao {
         PreparedStatement ps = null;
         String data;
         try {
-            ps = connection.prepareStatement("SELECT distinct LANGUAGE FROM PR_CVG_DATA  WHERE LANGUAGE LIKE ?");
+            ps = connection.prepareStatement("select distinct language from pr_cvg_data  where language like ?");
             ps.setString(1, language + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                data = rs.getString("LANGUAGE");
+                data = rs.getString("language");
                 list.add(data);
             }
         } catch (SQLException e) {
@@ -119,9 +119,9 @@ public class DataDao {
             int id = 1;
             boolean others = false;
             String lang = null;
-            ResultSet rs = stmt.executeQuery("SELECT distinct LANGUAGE FROM PR_CVG_DATA");
+            ResultSet rs = stmt.executeQuery("select distinct language from pr_cvg_data");
             while (rs.next()) {
-                lang = rs.getString("LANGUAGE");
+                lang = rs.getString("language");
                 list.add(new SimpleIdValue(new Integer(id), lang));
                 if ("others".equalsIgnoreCase(lang)) {
                     others = true;
@@ -141,7 +141,7 @@ public class DataDao {
         ArrayList<CoverageData> list = new ArrayList<CoverageData>();
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM PR_CVG_DATA order by id desc");
+            ResultSet rs = stmt.executeQuery("select * from pr_cvg_data order by id desc");
             while (rs.next()) {
                 list.add(getCoverageDataObj(rs));
             }
@@ -156,7 +156,7 @@ public class DataDao {
         int offset = (stPgIdx - 1) * recPerPg;
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM PR_CVG_DATA order by id desc limit " + offset + "," + recPerPg);
+            ResultSet rs = stmt.executeQuery("select * from pr_cvg_data order by id desc limit " + offset + "," + recPerPg);
             while (rs.next()) {
                 list.add(getCoverageDataObj(rs));
             }
@@ -170,9 +170,9 @@ public class DataDao {
         int count = 0;
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS COUNT FROM " + table);
+            ResultSet rs = stmt.executeQuery("select count(*) as count from " + table);
             while (rs.next()) {
-                count = rs.getInt("COUNT");
+                count = rs.getInt("count");
             }
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -218,11 +218,11 @@ public class DataDao {
 
     public void addCoverageData(CoverageData cd) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO pr_cvg_data "
-                    + "(News_Date, Newspaper, Headline, Edition, Supplement, Source, Page_No, "
-                    + "Height, Width, Total_Article_Size, Circulation_Figure, Quantitative_AVE, "
-                    + "Image_Exists, Journalist_Factor, Language, Image) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("insert into pr_cvg_data "
+                    + "(news_date, newspaper, headline, edition, supplement, source, page_no, "
+                    + "height, width, total_article_size, circulation_figure, quantitative_ave, "
+                    + "image_exists, journalist_factor, language, image) "
+                    + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setDate(1, cd.getNewsDate());
             ps.setString(2, cd.getNewspaper());
             ps.setString(3, cd.getHeadline());
@@ -292,11 +292,11 @@ public class DataDao {
         //String imageExists = getCoverageDataById(cd.getId()).getImageExists();
         try {
             PreparedStatement ps
-                    = connection.prepareStatement("update pr_cvg_data set News_Date=?, "
-                            + "Newspaper=?, Headline=?, Edition=?, Supplement=?, "
-                            + "Source=?, Page_No=?, Height=?, Width=?, Total_Article_Size=?, "
-                            + "Circulation_Figure=?, Quantitative_AVE=?, Image_Exists=?, "
-                            + "Journalist_Factor=?, Language=?, Image=? where id = ?");
+                    = connection.prepareStatement("update pr_cvg_data set news_date=?, "
+                            + "newspaper=?, headline=?, edition=?, supplement=?, "
+                            + "source=?, page_no=?, height=?, width=?, total_article_size=?, "
+                            + "circulation_figure=?, quantitative_ave=?, image_exists=?, "
+                            + "journalist_factor=?, language=?, image=? where id = ?");
             ps.setDate(1, cd.getNewsDate());
             ps.setString(2, cd.getNewspaper());
             ps.setString(3, cd.getHeadline());
@@ -371,7 +371,7 @@ public class DataDao {
 
     public void deleteCvgData(Integer cvgDataId) {
         try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM pr_cvg_data where id = ?");
+            PreparedStatement ps = connection.prepareStatement("delete from pr_cvg_data where id = ?");
             ps.setInt(1, cvgDataId);
             ps.executeUpdate();
         } catch (SQLException ex) {
@@ -381,9 +381,9 @@ public class DataDao {
 
     public void addEntityMatrix(EntityMatrix em) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO pr_entity_matrix "
+            PreparedStatement ps = connection.prepareStatement("insert into pr_entity_matrix "
                     + "(commodity, headline, image, article, pr_cvg_data_id) "
-                    + "VALUES (?,?,?,?,?)");
+                    + "values (?,?,?,?,?)");
             ps.setString(1, em.getCommodity());
             if (em.getHeadline() == null) {
                 ps.setNull(2, java.sql.Types.INTEGER);
@@ -440,9 +440,9 @@ public class DataDao {
     
     public void addKeyword(Keyword keyword) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO pr_keyword "
+            PreparedStatement ps = connection.prepareStatement("insert into pr_keyword "
                                                             + "(keyword, is_deleted) "
-                                                            + "VALUES (?,'N')");
+                                                            + "values (?,'N')");
             ps.setString(1, keyword.getKeyword());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -452,7 +452,7 @@ public class DataDao {
 
     public void updateKeyword(Keyword keyword) {
         try {
-            PreparedStatement ps = connection.prepareStatement("Update pr_keyword "
+            PreparedStatement ps = connection.prepareStatement("update pr_keyword "
                                                             + "set keyword = ?, is_deleted = ? "
                                                             + "where id = ?");
             ps.setString(1, keyword.getKeyword());
@@ -468,7 +468,7 @@ public class DataDao {
         ArrayList<Keyword> list = new ArrayList<Keyword>();
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM PR_KEYWORD WHERE IS_DELETED = 'N' order by id desc");
+            ResultSet rs = stmt.executeQuery("select * from pr_keyword where is_deleted = 'N' order by id desc");
             while (rs.next()) {
                 list.add(getKeywordObj(rs));
             }

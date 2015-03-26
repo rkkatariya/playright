@@ -21,6 +21,7 @@ import com.google.visualization.datasource.datatable.value.ValueType;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -28,6 +29,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -49,6 +51,32 @@ public class ChartDao {
         }
     }
 
+    public String getMixMaxDateStr() throws SQLException {
+        String query = "select min(news_date) as min_date, max(news_date) as max_date from pr_cvg_data";
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        Date minDate = new Date(0);
+        Date maxDate = new Date(0);
+        while (rs.next()) {
+            minDate = rs.getDate("min_date");
+            maxDate = rs.getDate("max_date");            
+        }
+        return minDate.toString() + " - " + maxDate.toString();
+    }
+
+    public String getTotalPRValue(String fromDate, String toDate, String allData) throws SQLException {
+        String query = addDateFilter("select sum(quantitative_ave) as totPRVal from pr_cvg_data", 
+                fromDate, toDate, allData);        
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        BigDecimal totPRVal = new BigDecimal(0);
+        while (rs.next()) {
+            totPRVal = rs.getBigDecimal("totPRVal");
+        }
+        DecimalFormat formatter = new DecimalFormat("##,##,##,##,###.00");
+        return formatter.format(totPRVal);
+    }
+    
     public DataTable getDataTable(String chart, String fromDate, String toDate, String allData) {
         String query = null;
         ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
@@ -57,42 +85,64 @@ public class ChartDao {
                     + "from pr_cvg_data group by edition", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("edition", ValueType.TEXT, "City"));
-            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
         } else if ("languagewisesplit".equals(chart)) {
             query = addDateFilter("select language, count(*) as articles "
                     + "from pr_cvg_data group by language", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("language", ValueType.TEXT, "Language"));
-            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
         } else if ("newspaperwisesplit".equals(chart)) {
             query = addDateFilter("select newspaper, count(*) as articles "
                     + "from pr_cvg_data group by newspaper", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("newspaper", ValueType.TEXT, "Newspaper"));
-            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
         } else if ("journalfactorsplit".equals(chart)) {
             query = addDateFilter("select journalist_factor, count(*) as articles "
                     + "from pr_cvg_data group by journalist_factor", 
                     fromDate, toDate, allData);
             cd.add(new ColumnDescription("journalfact", ValueType.TEXT, "Joutnalist Factor"));
-            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "No. of Articles"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
         } else if ("cfvaluebar".equals(chart)) {
-            query = "select em.Commodity as keyword, round(sum(\n" +
-                    "(em.Headline * (select value from pr_settings where name = 'FACTOR_HEADLINE' and status = 'A') +\n" +
-                    "em.Image * (select value from pr_settings where name = 'FACTOR_IMAGE' and status = 'A') +\n" +
-                    "em.Article * (select value from pr_settings where name = 'FACTOR_ARTICLE' and status = 'A') ) * cd.Circulation_Figure\n" +
-                    "    * 0.01)) as cfval\n" +
+            query = "select em.commodity as keyword, round(sum(\n" +
+                    "(em.headline * (select value from pr_settings where name = 'FACTOR_HEADLINE' and status = 'A') +\n" +
+                    "em.image * (select value from pr_settings where name = 'FACTOR_IMAGE' and status = 'A') +\n" +
+                    "em.article * (select value from pr_settings where name = 'FACTOR_ARTICLE' and status = 'A') ) " + 
+                    "* cd.quantitative_ave * 0.01)) as cfval\n" +
                     "from pr_entity_matrix em\n" +
-                    "JOIN pr_cvg_data cd on em.pr_cvg_data_id = cd.id\n";
+                    "join pr_cvg_data cd on em.pr_cvg_data_id = cd.id\n" +
+                    "join pr_keyword k on em.commodity = k.keyword\n" +
+                    "where k.is_deleted != 'Y'";
             if (!"Y".equalsIgnoreCase(allData)) {
-                query = query + "where cd.news_date >= '"+fromDate+"' and cd.news_date <= '"+toDate+"'\n" +
-                    "group by em.Commodity";
-            } else {
-                query = query + "group by em.Commodity";
+                query = query + " and cd.news_date >= '"+fromDate+"' and cd.news_date <= '"+toDate+"'";
             }
+            query = query + " group by em.commodity";
+            
             cd.add(new ColumnDescription("circfigval", ValueType.TEXT, "Circulation Figure"));
-            cd.add(new ColumnDescription("value", ValueType.NUMBER, "Value"));
-        }
+            cd.add(new ColumnDescription("value", ValueType.NUMBER, "INR"));
+        } else if ("topenglish".equals(chart)) {
+            query = "select newspaper, count(*) as count from pr_cvg_data \n" +
+                    "where language = 'English'";
+            if (!"Y".equalsIgnoreCase(allData)) {
+                query = query + " and news_date >= '"+fromDate+"' and news_date <= '"+toDate+"'";
+            }
+            query = query + " group by newspaper\n" +
+                    "order by count(*) desc limit 5";
+            
+            cd.add(new ColumnDescription("newspaper", ValueType.TEXT, "Newspaper"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
+        } else if ("topvernacular".equals(chart)) {
+            query = "select newspaper, count(*) as count from pr_cvg_data \n" +
+                    "where language != 'English'";
+            if (!"Y".equalsIgnoreCase(allData)) {
+                query = query + " and news_date >= '"+fromDate+"' and news_date <= '"+toDate+"'";
+            }
+            query = query + " group by newspaper\n" +
+                    "order by count(*) desc limit 5";
+            cd.add(new ColumnDescription("newspaper", ValueType.TEXT, "Newspaper"));
+            cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
+        } 
         DataTable dt = new DataTable();
         try {
             dt = createDataTable(cd, getResultSet(query));
@@ -106,15 +156,8 @@ public class ChartDao {
 
     private ResultSet getResultSet(String query)
             throws SQLException {
-        ResultSet rs = null;
-        String filteredQuery = null;
-        System.out.println(filteredQuery);
         Statement stmt = connection.createStatement();
-//        if (!"Y".equalsIgnoreCase(allData)) {
-//            ps.setString(1, fromDate);
-//            ps.setString(2, toDate);
-//        }
-        rs = stmt.executeQuery(query);
+        ResultSet rs = stmt.executeQuery(query);
         return rs;
     }
 
@@ -255,7 +298,7 @@ public class ChartDao {
         }
     }
 
-    private void close() {
+    public void close() {
         try {
             connection.close();
         } catch (SQLException ex) {

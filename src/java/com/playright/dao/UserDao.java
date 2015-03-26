@@ -19,10 +19,9 @@ import java.util.logging.Logger;
 public class UserDao {
 
     private Connection dbConnection;
-    private PreparedStatement pStmt;
 
-    private String SQL_LOGIN = "SELECT user_id FROM users WHERE user_id = ? AND password = ?";
-    private String SQL_INSERT = "INSERT INTO users (first_name,last_name,email,password,user_id) VALUES (?,?,?,?,?)";
+    private String SQL_LOGIN = "select user_id from users where user_id = ? and password = ?";
+    private String SQL_INSERT = "insert into users (first_name,last_name,email,password,user_id) values (?,?,?,?,?)";
 
     public UserDao() {
         try {
@@ -35,16 +34,16 @@ public class UserDao {
     public String verifyUser(String userid, String password) {
         String userName = null;
         try {
-            pStmt = dbConnection.prepareStatement(SQL_LOGIN);
-            pStmt.setString(1, userid);
-            pStmt.setString(2, password);
-            ResultSet rs = pStmt.executeQuery();
+            PreparedStatement ps;            
+            ps = dbConnection.prepareStatement(SQL_LOGIN);
+            ps.setString(1, userid);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 userName = rs.getString("user_id");
             }
-            System.out.println(userName);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+        } catch (Exception ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userName;
     }
@@ -53,15 +52,16 @@ public class UserDao {
             String userId) {
         int result = 0;
         try {
-            pStmt = dbConnection.prepareStatement(SQL_INSERT);
-            pStmt.setString(1, fname);
-            pStmt.setString(2, lname);
-            pStmt.setString(3, email);
-            pStmt.setString(4, password);
-            pStmt.setString(5, userId);
-            result = pStmt.executeUpdate();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+            PreparedStatement ps;
+            ps = dbConnection.prepareStatement(SQL_INSERT);
+            ps.setString(1, fname);
+            ps.setString(2, lname);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            ps.setString(5, userId);
+            result = ps.executeUpdate();
+        } catch (Exception ex) {
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
@@ -70,7 +70,7 @@ public class UserDao {
         try {
             dbConnection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(ChartDao.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
 }

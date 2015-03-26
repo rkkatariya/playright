@@ -39,15 +39,41 @@ public class EmailDao {
             Logger.getLogger(EmailDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private void populateEmailProperties() throws Exception{
+
+    public String fetchDataForCSV(String fromDate, String toDate) throws Exception {
+        if(fromDate == null || fromDate.length() == 0){
+            fromDate = getTodaysDate();
+        }
+        
+        if(toDate == null || toDate.length() == 0){
+            toDate = getTodaysDate();
+        }
+        
+        StringBuffer csvData = new StringBuffer();
+        csvData.append("News Date, Newspaper, Language, Headline, Edition, Supplement, Source, Page No, Height, Width, Total Article, Circulation Figure, Quantitative AVE, Journalist Factor, Image");
+        csvData.append("\n");
+        PreparedStatement stmt = connection.prepareStatement("select date_format(news_date,'%d/%m/%Y') as news_date,concat('\"',IFNULL(newspaper,''),'\",\"', IFNULL(language,''),'\",\"',IFNULL(headline,''),'\",\"',IFNULL(edition,''),'\",\"',IFNULL(supplement,''),'\",\"',IFNULL(source,''),'\",\"',IFNULL(page_no,''),'\",\"',IFNULL(height,''),'\",\"',IFNULL(width,''),'\",\"',IFNULL(total_article_size,''),'\",\"',IFNULL(circulation_figure,''),'\",\"',IFNULL(quantitative_ave,''),'\",\"',IFNULL(journalist_factor,''),'\",\"',IFNULL(image_exists,''),'\"') as data from pr_cvg_data where news_date >= str_to_date(?,'%d/%m/%Y') and news_date <= str_to_date(?,'%d/%m/%Y')");
+        stmt.setString(1, fromDate);
+        stmt.setString(2, toDate);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            csvData.append("\"");
+            csvData.append(rs.getString("news_date"));
+            csvData.append("\",");
+            csvData.append(rs.getString("data"));
+            csvData.append("\n");
+        }
+        return csvData.toString();
+    }
+
+    private void populateEmailProperties() throws Exception {
         Statement stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery("select distinct name, value from pr_settings where name like 'EMAIL_%' and status = 'A'");
         Map<String, String> emailProps = new HashMap<String, String>();
-        while(rs.next()){
+        while (rs.next()) {
             emailProps.put(rs.getString("name"), rs.getString("value"));
         }
-        
+
         host = emailProps.get("EMAIL_HOST");
         port = emailProps.get("EMAIL_PORT");
         mailFrom = emailProps.get("EMAIL_FROM");
@@ -150,7 +176,13 @@ public class EmailDao {
         sb.append("<td colspan=\"8\">");
         sb.append("</td>");
         sb.append("<td colspan=\"4\" rowspan=\"2\" style=\"text-indent: 0px; text-align: center;\">");
-        sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 16px; line-height: 1; *line-height: normal; font-weight: bold;\">Playright<br/>Data Center</span></td>");
+        sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 15px; line-height: 1; *line-height: normal; white-space: nowrap; font-weight: bold;\">PlayRight: Media Analysis</span><br/><br/>");
+        sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 12px; line-height: 1; *line-height: normal; white-space: nowrap; font-weight: bold;\">Client: Royal Challengers Bangalore<br/><br/>");
+        sb.append("&nbsp;&nbsp;Date: ");
+        sb.append(fromDate);
+        sb.append(" - ");
+        sb.append(toDate);
+        sb.append("</span></td>");
         sb.append("<td colspan=\"8\">");
         sb.append("</td>");
         sb.append("</tr>");
@@ -173,11 +205,12 @@ public class EmailDao {
         sb.append("</td>");
         sb.append("<td colspan=\"3\">");
         sb.append("</td>");
-        sb.append("<td colspan=\"2\" style=\"text-indent: 0px; text-align: left;\">");
+        sb.append("<td colspan=\"1\" style=\"text-indent: 0px; text-align: left;\">");
         sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 12px; line-height: 1.2578125; white-space: nowrap; font-weight: bold;\">");
-        sb.append(fromDate);
-        sb.append(" - ");
-        sb.append(toDate);
+//        sb.append("&nbsp;&nbsp;Date: ");
+//        sb.append(fromDate);
+//        sb.append(" - ");
+//        sb.append(toDate);
         sb.append("</span></td>");
         sb.append("<td colspan=\"3\">");
         sb.append("</td>");
@@ -265,20 +298,22 @@ public class EmailDao {
         sb.append("<tr valign=\"top\" style=\"height:25px\">");
         sb.append("<td colspan=\"2\">");
         sb.append("</td>");
-        sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+        sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
         sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">Date</span></td>");
-        sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+        sb.append("<td colspan=\"5\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
         sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">Headline</span></td>");
-        sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+        sb.append("<td colspan=\"1\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
         sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">Publication</span></td>");
-        sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+        sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
         sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">Edition</span></td>");
         sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
-        sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">&nbsp; Page No.</span></td>");
-        sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+        sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">Page #</span></td>");
+        sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
         sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">Source</span></td>");
-        sb.append("<td colspan=\"2\">");
-        sb.append("</td>");
+        sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-left: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+        sb.append("<span style=\"font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif; color: #000000; font-size: 11px; line-height: 1.2578125; font-weight: bold;\">Image</span></td>");
+//        sb.append("<td colspan=\"2\">");
+//        sb.append("</td>");
         sb.append("</tr>");
         sb.append("<tr valign=\"top\" style=\"height:2px\">");
         sb.append("<td colspan=\"2\">");
@@ -353,7 +388,7 @@ public class EmailDao {
         sb.append("</td>");
         sb.append("<td style=\"background-color: #EBE8E8; border-bottom: 1px solid #CCCCCC; border-right: 1px solid #CCCCCC; \">");
         sb.append("</td>");
-        sb.append("<td colspan=\"2\">");
+        sb.append("<td colspan=\"3\">");
         sb.append("</td>");
         sb.append("</tr>");
         sb.append(fetchPopulateData(fromDate, toDate, imageLink));
@@ -452,24 +487,24 @@ public class EmailDao {
             StringBuffer sb = new StringBuffer();
             String headline = "";
             if ("Y".equalsIgnoreCase(rs.getString("image_exists"))) {
-                headline = "<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023; font-weight: bold;\"><a href=\"" 
-                        + imageLink + rs.getString("cvgDataId") + "\">" + rs.getString("headline") + "</a></span></td>";                
+                headline = "<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023; font-weight: bold;\"><a href=\""
+                        + imageLink + rs.getString("cvgDataId") + "\">" + rs.getString("headline") + "</a></span></td>";
             } else {
                 headline = "<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023; font-weight: bold;\">"
                         + rs.getString("headline") + "</span></td>";
             }
             sb.append("<tr valign=\"top\" style=\"height:18px\"><td></td><td></td>");
-            sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+            sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
             sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023;\">");
             sb.append(rs.getString("news_date"));
             sb.append("</span></td>");
-            sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+            sb.append("<td colspan=\"5\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
             sb.append(headline);
-            sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+            sb.append("<td colspan=\"1\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
             sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023;\">");
             sb.append(rs.getString("newspaper"));
             sb.append("</span></td>");
-            sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+            sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; padding-right: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
             sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023;\">");
             sb.append(rs.getString("edition"));
             sb.append("</span></td>");
@@ -477,10 +512,16 @@ public class EmailDao {
             sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023;\">");
             sb.append(rs.getString("page_no"));
             sb.append("</span></td>");
-            sb.append("<td colspan=\"3\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+            sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
             sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023;\">");
             sb.append(rs.getString("source"));
-            sb.append("</span></td><td colspan=\"2\"></td></tr>");
+            sb.append("</span></td>");
+            sb.append("<td colspan=\"2\" style=\"border: 1px solid #CCCCCC; padding-bottom: 1px; text-indent: 0px;  vertical-align: middle;text-align: center;\">");
+            sb.append("<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023;\">");
+            sb.append(rs.getString("image_exists"));
+            sb.append("</span></td>");
+//            sb.append("<td colspan=\"2\"></td>");
+            sb.append("</tr>");
             finalSb.append(sb);
         }
 

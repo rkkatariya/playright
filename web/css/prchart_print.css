@@ -8,27 +8,39 @@ and open the template in the editor.
     Author     : Rahul
 */
 /* CSS Document */
-body {overflow-x: hidden; background-color:#FFFFFF; padding:0px; margin:0px; width:8.5in;}
+body {overflow-x: hidden; background-color:#FFFFFF; padding:0px; margin:0px; width:8.5in; height: 11in;
+        color: #2c3e50; font:17px/17px Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
 div, ul, li, h1, h2, h3, h4, p, img{margin:0px; padding:0px;}
 ul{list-style-type:none;}
-#header_container{border-bottom:7px solid red; left:0; width:8.5in; height:96px; padding:0px; top: 0;}
-#header{background-color: white; height:86px; width: 100%; margin:0 auto; padding:0px 9px 0px 14px;}
-#header img{height:86px; position:relative; top:0; padding:0px; margin:0 auto;}
-#body_container {overflow:auto; padding:0px 0 0px 0; width:8.5in; }
+#header_container{border-bottom:7px solid #e74c3c; left:0; width:8.5in; height:96px; padding:0px; top: 0;}
+#header{background-color: white; height:89px; width: 100%; margin:0 auto; padding: 5px 0 0 0}
+#header img{height:86px; position:relative; top:0; padding:0 30px 0 20px;  margin:0 auto;}
+#body_container {overflow:auto; padding:0; margin: 0 auto; left:0; width:8.5in;  }
 #footer_container{border-top: 2px solid red;height:45px; bottom:0; left:0; width:8.5in; }
 #footer{width:100%; height:43px; position:relative; margin:0 auto;}
-#footer img{float: right; height:36px; width:101px; bottom: 0; padding:4px 0;}
-.rowdiv{min-height: 300px; text-align: center; margin:0 auto; }
-.innerdivl{float: left; width: 50%; text-align: center; padding: 0 0 3px 0; font:17px/17px Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}
-.innerdivr{float: right; width: 50%; text-align: center; padding: 0 0 3px 0; font:17px/17px Verdana, Arial, Helvetica, sans-serif; font-weight: bold;}    
-.innerdivf{text-align: center; padding: 0 0 3px 0; font:17px/17px Verdana, Arial, Helvetica, sans-serif; font-weight: bold;} 
-.printbutton{height:60px; padding: 10px 0 10px 0;   }
+#footer img{float: left; height:36px; width:101px; bottom: 0; padding:4px 0;}
+.rowdiv{height: 240px; text-align: center; margin:0 auto; }
+.rowdivtitle{height: 75px; text-align: center; margin:0 auto;}
+.innerdivl{float: left; width: 50%; text-align: center; padding: 0 0 3px 0;}
+.innerdivr{float: right; width: 50%; text-align: center; padding: 0 0 3px 0;}    
+.innerdivf{text-align: center; padding: 0 0 3px 0;} 
+.printbutton{height:21px; padding: 10px 0 0 0;}
+
+#citywise_div{float: right; width: 99%; height: 240px;}
+#journalfact_div{float: right; width: 99%; height: 240px;}
+#topenglish_div{float: right; width: 99%; height: 240px;}
+#langwise_div{float: left; width: 99%; height: 240px;}
+#circfig_div{float: left; width: 99%; min-height: 240px;}
+#topvernacular_div{float: left; width: 99%; height: 240px;}
+
+
 /* CSS for Print */
 @media print {
     body {
         width: 210mm;
         height: 297mm;
-        margin-left: 16mm;
+        margin-top: 10mm;
+        margin-bottom: 10mm;
     }
     button {
         display: none;

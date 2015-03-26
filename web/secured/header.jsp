@@ -8,7 +8,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <title>Playright Analytics</title>
+        <title>PlayRight Analytics</title>
         <link rel="stylesheet" type="text/css" href="../css/prstyle.css" />
         <link rel="stylesheet" type="text/css" href="../js/easyui/themes/gray/easyui.css">
         <link rel="stylesheet" type="text/css" href="../js/easyui/themes/icon.css">
@@ -18,7 +18,7 @@
     <body>
         <div id="header_container">
             <div id="header">
-                <a href="../index.jsp" style="text-align: left; float: left;"><img id="imgl" src="../images/logo.png" alt="Playright Analytics" title="Playright Analytics" border="0" /></a>
+                <a href="../index.jsp" style="text-align: left; float: left;"><img id="imgl" src="../images/logo.png" alt="PlayRight Analytics" title="PlayRight Analytics" border="0" /></a>
                 <a href="../index.jsp" style="text-align: right; float: right;"><img id="imgr" src="../images/rcb.png" alt="Royal Challengers Bangalore" title="Royal Challengers Bangalore" border="0" /></a>
             </div>
             <div id="line"></div>
