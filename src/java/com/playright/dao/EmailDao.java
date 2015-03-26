@@ -476,7 +476,7 @@ public class EmailDao {
     }
 
     private Object fetchPopulateData(String fromDate, String toDate, String imageLink) throws Exception {
-        String query = "select id as cvgDataId, date_format(news_date,'%d/%m/%Y') as news_date,headline,newspaper,edition,page_no,source, image_exists from pr_cvg_data where news_date >= str_to_date(?,'%d/%m/%Y') and news_date <= str_to_date(?,'%d/%m/%Y')";
+        String query = "select id as cvgDataId, date_format(news_date,'%d/%m/%Y') as news_date,headline,newspaper,edition,page_no,source, image_exists, image from pr_cvg_data where news_date >= str_to_date(?,'%d/%m/%Y') and news_date <= str_to_date(?,'%d/%m/%Y')";
         PreparedStatement pstmt = connection.prepareStatement(query);
         pstmt.setString(1, fromDate);
         pstmt.setString(2, toDate);
@@ -486,7 +486,7 @@ public class EmailDao {
         while (rs.next()) {
             StringBuffer sb = new StringBuffer();
             String headline = "";
-            if ("Y".equalsIgnoreCase(rs.getString("image_exists"))) {
+            if (rs.getBlob("image") != null) {
                 headline = "<span style=\"font-family: Arial; color: #000000; font-size: 11px; line-height: 1.1499023; font-weight: bold;\"><a href=\""
                         + imageLink + rs.getString("cvgDataId") + "\">" + rs.getString("headline") + "</a></span></td>";
             } else {
