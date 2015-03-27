@@ -260,12 +260,9 @@ public class DataController extends HttpServlet {
             } catch (IOException ex) {
                 Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
             }
-//            if (b != null && b.length() != 0) {
-//                cd.setImageExists("Y");
-//                cd.setImageBlob(b);
-//            } else {
-//                cd.setImageExists("N");
-//            }
+            if (b != null && b.length() != 0) {
+                cd.setImageBlob(b);
+            }
         } catch (ParseException ex) {
             Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

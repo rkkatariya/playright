@@ -289,14 +289,17 @@ public class DataDao {
     }
 
     public void updateCoverageData(CoverageData cd) {
-        //String imageExists = getCoverageDataById(cd.getId()).getImageExists();
+        String query = "update pr_cvg_data set news_date=?, "
+                    + "newspaper=?, headline=?, edition=?, supplement=?, "
+                    + "source=?, page_no=?, height=?, width=?, total_article_size=?, "
+                    + "circulation_figure=?, quantitative_ave=?, image_exists=?, "
+                    + "journalist_factor=?, language=? where id = ?";
+        if (cd.getImageBlob() != null) {
+            query = query.replace(" where", ", image=? where");
+        }
         try {
             PreparedStatement ps
-                    = connection.prepareStatement("update pr_cvg_data set news_date=?, "
-                            + "newspaper=?, headline=?, edition=?, supplement=?, "
-                            + "source=?, page_no=?, height=?, width=?, total_article_size=?, "
-                            + "circulation_figure=?, quantitative_ave=?, image_exists=?, "
-                            + "journalist_factor=?, language=?, image=? where id = ?");
+                    = connection.prepareStatement(query);
             ps.setDate(1, cd.getNewsDate());
             ps.setString(2, cd.getNewspaper());
             ps.setString(3, cd.getHeadline());
@@ -338,31 +341,19 @@ public class DataDao {
                 ps.setString(13, "N");
             } else {
                 ps.setString(13, cd.getImageExists());
-            }
-            
-//            if ("Y".equalsIgnoreCase(imageExists) 
-//                    || "Y".equalsIgnoreCase(cd.getImageExists())) {
-//                ps.setString(13, "Y");
-//            } else {
-//                ps.setString(13, "N");
-//            }
+            }            
             if (cd.getJournalistFactor() == null) {
                 ps.setInt(14, 1);
             } else {
                 ps.setInt(14, cd.getJournalistFactor());
             }
             ps.setString(15, cd.getLanguage());
-//            if ("Y".equalsIgnoreCase(cd.getImageExists())) {
-//                ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
-//            } else {
-//                ps.setBinaryStream(16, null);
-//            }
             if (cd.getImageBlob() != null) {
                 ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
+                ps.setInt(17, cd.getId());
             } else {
-                ps.setBinaryStream(16, null);
+                ps.setInt(16, cd.getId());
             }
-            ps.setInt(17, cd.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
