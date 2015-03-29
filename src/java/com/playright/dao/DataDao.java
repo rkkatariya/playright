@@ -42,17 +42,17 @@ public class DataDao {
         }
     }
 
-    public CoverageData getCoverageDataById(Integer id) {
+    public CoverageData getCoverageDataById(Integer id, Boolean loadImage) {
         CoverageData cd = new CoverageData();
         try {
             PreparedStatement ps = connection.prepareStatement("select * from pr_cvg_data  where id = ?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                cd = getCoverageDataObj(rs);
+                cd = getCoverageDataObj(rs, loadImage);
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cd;
     }
@@ -66,8 +66,8 @@ public class DataDao {
             while (rs.next()) {
                 em = getEntityMatrixObj(rs);
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return em;
     }
@@ -87,8 +87,8 @@ public class DataDao {
             while (rs.next()) {
                 list.add(getEntityMatrixObj(rs));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+           Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
@@ -98,15 +98,15 @@ public class DataDao {
         PreparedStatement ps = null;
         String data;
         try {
-            ps = connection.prepareStatement("select distinct language from pr_cvg_data  where language like ?");
+            ps = connection.prepareStatement("select distinct language from pr_cvg_data where language like ?");
             ps.setString(1, language + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 data = rs.getString("language");
                 list.add(data);
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
@@ -131,8 +131,8 @@ public class DataDao {
             if (!others) {
                 list.add(new SimpleIdValue(id, "Others"));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
@@ -143,10 +143,10 @@ public class DataDao {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from pr_cvg_data order by id desc");
             while (rs.next()) {
-                list.add(getCoverageDataObj(rs));
+                list.add(getCoverageDataObj(rs, false));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
@@ -158,10 +158,10 @@ public class DataDao {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select * from pr_cvg_data order by id desc limit " + offset + "," + recPerPg);
             while (rs.next()) {
-                list.add(getCoverageDataObj(rs));
+                list.add(getCoverageDataObj(rs, false));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }
@@ -174,13 +174,13 @@ public class DataDao {
             while (rs.next()) {
                 count = rs.getInt("count");
             }
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return count;
     }
 
-    private static CoverageData getCoverageDataObj(ResultSet rs) throws SQLException {
+    private static CoverageData getCoverageDataObj(ResultSet rs, Boolean loadImage) throws SQLException {
         CoverageData cd = new CoverageData();
         cd.setId(rs.getInt("id"));
         cd.setNewsDate(rs.getDate("news_date"));
@@ -198,9 +198,15 @@ public class DataDao {
         cd.setImageExists(rs.getString("image_exists"));
         cd.setJournalistFactor(rs.getInt("journalist_factor"));
         cd.setLanguage(rs.getString("language"));
-        cd.setImageBlob(rs.getBlob("image"));
-        if (rs.getBlob("image") != null) {
-            cd.setImageUrl("<a target=\"_blank\" href=\"DataController?action=displayImage&cvgDataId="+rs.getInt("id")+"\">img</a>");
+        //Get blob only when needed
+        if (loadImage) {
+            cd.setImageBlob(rs.getBlob("image"));
+        }
+        cd.setImageType(rs.getString("image_type"));
+        String filename = rs.getString("image_filename"); 
+        cd.setImageFileName(filename);
+        if (filename != null && !"".equals(filename)) {
+            cd.setImageUrl("<a target=\"_blank\" href=\"DataController/"+filename+"?action=displayImage&cvgDataId="+rs.getInt("id")+"\">img</a>");
         }
         return cd;
     }
@@ -221,8 +227,8 @@ public class DataDao {
             PreparedStatement ps = connection.prepareStatement("insert into pr_cvg_data "
                     + "(news_date, newspaper, headline, edition, supplement, source, page_no, "
                     + "height, width, total_article_size, circulation_figure, quantitative_ave, "
-                    + "image_exists, journalist_factor, language, image) "
-                    + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                    + "image_exists, journalist_factor, language, image, image_filename, image_type) "
+                    + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setDate(1, cd.getNewsDate());
             ps.setString(2, cd.getNewspaper());
             ps.setString(3, cd.getHeadline());
@@ -272,19 +278,19 @@ public class DataDao {
                 ps.setInt(14, cd.getJournalistFactor());
             }
             ps.setString(15, cd.getLanguage());
-//            if ("Y".equalsIgnoreCase(cd.getImageExists())) {
-//                ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
-//            } else {
-//                ps.setBinaryStream(16, null);
-//            }
             if (cd.getImageBlob() != null) {
                 ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
+                ps.setString(17, cd.getImageFileName());
+                ps.setString(18, cd.getImageType());
             } else {
                 ps.setBinaryStream(16, null);
+                ps.setString(17, null);
+                ps.setString(18, null);
             }
+            
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -295,7 +301,7 @@ public class DataDao {
                     + "circulation_figure=?, quantitative_ave=?, image_exists=?, "
                     + "journalist_factor=?, language=? where id = ?";
         if (cd.getImageBlob() != null) {
-            query = query.replace(" where", ", image=? where");
+            query = query.replace(" where", ", image_type=?, image_filename=?, image=? where");
         }
         try {
             PreparedStatement ps
@@ -349,14 +355,16 @@ public class DataDao {
             }
             ps.setString(15, cd.getLanguage());
             if (cd.getImageBlob() != null) {
-                ps.setBinaryStream(16, cd.getImageBlob().getBinaryStream());
-                ps.setInt(17, cd.getId());
+                ps.setString(16, cd.getImageType());
+                ps.setString(17, cd.getImageFileName());
+                ps.setBinaryStream(18, cd.getImageBlob().getBinaryStream());
+                ps.setInt(19, cd.getId());
             } else {
                 ps.setInt(16, cd.getId());
             }
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -397,8 +405,8 @@ public class DataDao {
                 ps.setInt(5, em.getCvgDataId());
             }
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
 
@@ -424,8 +432,8 @@ public class DataDao {
             }            
             ps.setInt(4, em.getId());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }
     
@@ -436,8 +444,8 @@ public class DataDao {
                                                             + "values (?,'N')");
             ps.setString(1, keyword.getKeyword());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }    
 
@@ -450,8 +458,8 @@ public class DataDao {
             ps.setString(2, keyword.getIsDeleted());
             ps.setInt(3, keyword.getId());
             ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }        
     }    
     
@@ -463,8 +471,8 @@ public class DataDao {
             while (rs.next()) {
                 list.add(getKeywordObj(rs));
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (SQLException ex) {
+            Logger.getLogger(DataDao.class.getName()).log(Level.SEVERE, null, ex);
         }
         return list;
     }    

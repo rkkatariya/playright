@@ -176,7 +176,7 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
     }
     
     private static String getValidMySQLDate(String inSdf, String inDate) {
-        String dateSql = "";
+        String dateSql;
         SimpleDateFormat sdfIn = new SimpleDateFormat(inSdf);
         //Needed for mySQL
         SimpleDateFormat sdfSql = new SimpleDateFormat("yyyy-MM-dd");
@@ -188,6 +188,7 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
             }
         } catch (ParseException ex) {
             Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
+            dateSql = sdfSql.format(Calendar.getInstance().getTime());
         }
         return dateSql;
     }

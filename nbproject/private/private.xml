@@ -3,16 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Git/playright/web/css/prstyle.css</file>
             <file>file:/D:/Git/playright/web/WEB-INF/web.xml</file>
-            <file>file:/D:/Git/playright/web/css/prchart.css</file>
-            <file>file:/D:/Git/playright/src/java/com/playright/servlet/LoginController.java</file>
-            <file>file:/D:/Git/playright/web/charts.jsp</file>
-            <file>file:/D:/Git/playright/web/chartfilter.jsp</file>
-            <file>file:/D:/Git/playright/src/java/com/playright/servlet/DataController.java</file>
+            <file>file:/D:/Git/playright/src/java/com/playright/dao/DBUtility.java</file>
             <file>file:/D:/Git/playright/setup/sun-resources.xml</file>
-            <file>file:/D:/Git/playright/web/header.jsp</file>
-            <file>file:/D:/Git/playright/web/WEB-INF/glassfish-web.xml</file>
+            <file>file:/D:/Git/playright/src/java/com/playright/dao/DataDao.java</file>
+            <file>file:/D:/Git/playright/src/java/com/playright/servlet/DataController.java</file>
+            <file>file:/D:/Git/playright/web/secured/data.jsp</file>
+            <file>file:/D:/Git/playright/src/java/com/playright/dao/UserDao.java</file>
+            <file>file:/D:/Git/playright/src/java/com/playright/model/CoverageData.java</file>
+            <file>file:/D:/Git/playright/web/secured/header.jsp</file>
         </group>
     </open-files>
 </project-private>

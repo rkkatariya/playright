@@ -35,6 +35,8 @@ public class CoverageData {
     private Integer journalistFactor;
     private String language;
     private Blob imageBlob;
+    private String imageFileName;
+    private String imageType;
     private String imageUrl;
     
     public CoverageData(Integer id, 
@@ -52,7 +54,10 @@ public class CoverageData {
             BigDecimal quantativeAve,
             String imageExists,
             Integer journalistFactor,
-            String language) {
+            String language,
+            String imageFileName,
+            String imageType,
+            Blob image) {
         this.id = id;
         this.newsDate = newsDate;
         this.newspaper = newspaper;
@@ -69,7 +74,9 @@ public class CoverageData {
         this.imageExists = imageExists;
         this.journalistFactor = journalistFactor;
         this.language = language;
-        
+        this.imageFileName = imageFileName;
+        this.imageType = imageType;
+        this.imageBlob = image;
     }
 
     /**
@@ -311,6 +318,20 @@ public class CoverageData {
     }
 
     /**
+     * @return the imageFileName
+     */
+    public String getImageFileName() {
+        return imageFileName;
+    }
+
+    /**
+     * @param imageFileName the imageFileName to set
+     */
+    public void setImageFileName(String imageFileName) {
+        this.imageFileName = imageFileName;
+    }
+
+    /**
      * @return the imageUrl
      */
     public String getImageUrl() {
@@ -322,5 +343,19 @@ public class CoverageData {
      */
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    /**
+     * @return the imageType
+     */
+    public String getImageType() {
+        return imageType;
+    }
+
+    /**
+     * @param imageType the imageType to set
+     */
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 }

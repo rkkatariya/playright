@@ -7,6 +7,8 @@ package com.playright.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.playright.dao.DataDao;
 import com.playright.model.CoverageData;
 import com.playright.model.EntityMatrix;
@@ -38,9 +40,9 @@ import org.apache.commons.io.IOUtils;
  *
  * @author Rahul
  */
-@MultipartConfig(fileSizeThreshold=1024*1024*1, // 2MB
-                 maxFileSize=1024*1024*1,      // 10MB
-                 maxRequestSize=1024*1024*2)
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 1, // 1MB
+        maxFileSize = 1024 * 1024 * 1, // 1MB
+        maxRequestSize = 1024 * 1024 * 2)   // 2MB
 public class DataController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -85,20 +87,6 @@ public class DataController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        processRequest(request, response);
-//        response.setContentType("application/json");
-//        try {
-//            String term = request.getParameter("term");
-//            System.out.println("Data from ajax call " + term);
-//
-//            DataDao dataDao = new DataDao();
-//            ArrayList<String> list = dataDao.getLanguagesStartWith(term);
-//
-//            String searchList = new Gson().toJson(list);
-//            response.getWriter().write(searchList);
-//        } catch (Exception e) {
-//            System.err.println(e.getMessage());
-//        }
         doPost(request, response);
     }
 
@@ -122,10 +110,9 @@ public class DataController extends HttpServlet {
             String successResponse = "{\"success\":\"true\"}";
             try {
                 if (action.equals("listCvgData")) {
-                    List<CoverageData> data = new ArrayList<CoverageData>();
                     int stPgIdx = Integer.parseInt(request.getParameter("page"));
                     int recPerPg = Integer.parseInt(request.getParameter("rows"));
-                    data = dataDao.getPaginatedCoverageData(stPgIdx, recPerPg);
+                    List<CoverageData> data = dataDao.getPaginatedCoverageData(stPgIdx, recPerPg);
                     int dataCount = dataDao.getTableSize("pr_cvg_data");
 
                     // Convert Java Object to Json
@@ -133,9 +120,8 @@ public class DataController extends HttpServlet {
                     jsonArray = "{\"total\":" + dataCount + ",\"rows\":" + jsonArray + "}";
                     response.getWriter().print(jsonArray);
                 } else if (action.equals("listEntityMatrix")) {
-                    List<EntityMatrix> data = new ArrayList<EntityMatrix>();
                     Integer cvgDataId = Integer.parseInt(request.getParameter("cvgDataId"));
-                    data = dataDao.getEntityMatrixByCvgDataId(cvgDataId);
+                    List<EntityMatrix> data = dataDao.getEntityMatrixByCvgDataId(cvgDataId);
                     String jsonArray = gson.toJson(data);
                     response.getWriter().print(jsonArray);
                 } else if (action.equals("saveCvgData")) {
@@ -160,12 +146,14 @@ public class DataController extends HttpServlet {
                     response.getWriter().print(jsonArray);
                 } else if (action.equals("displayImage")) {
                     Integer cvgDataId = Integer.parseInt(request.getParameter("cvgDataId"));
-                    Blob img = dataDao.getCoverageDataById(cvgDataId).getImageBlob();
+                    CoverageData cvgData = dataDao.getCoverageDataById(cvgDataId, true);
+                    Blob img = cvgData.getImageBlob();
                     byte[] imgData;
                     try {
-                        imgData = img.getBytes(1,(int)img.length());
-                        response.setHeader("expires", "0"); 
-                        response.setContentType("image/jpg");
+                        imgData = img.getBytes(1, (int) img.length());
+                        response.setHeader("expires", "0");
+                        response.setContentType(cvgData.getImageType());
+//                        response.addHeader("Content-Disposition: attachment", "attachment;filename="+cvgDataId+".jpg");
                         response.getOutputStream().write(imgData);
                         response.setContentLength(imgData.length);
                     } catch (SQLException ex) {
@@ -194,20 +182,35 @@ public class DataController extends HttpServlet {
                     String jsonArray = gson.toJson(data);
                     jsonArray = "{\"rows\":" + jsonArray + "}";
                     response.getWriter().print(jsonArray);
-                } 
-                dataDao.close();
-            } catch (Exception ex) {
+                }
+                
+            } catch (NumberFormatException ex) {
                 String error = "{\"result\":\"error\",\"errorMsg\":\"" + ex.getMessage() + "\"}";
                 response.getWriter().print(error);
+            } catch (IOException ex) {
+                String error = "{\"result\":\"error\",\"errorMsg\":\"" + ex.getMessage() + "\"}";
+                response.getWriter().print(error);
+            } catch (ServletException ex) {
+                String error = "{\"result\":\"error\",\"errorMsg\":\"" + ex.getMessage() + "\"}";
+                response.getWriter().print(error);
+            } catch (JsonSyntaxException ex) {
+                String error = "{\"result\":\"error\",\"errorMsg\":\"" + ex.getMessage() + "\"}";
+                response.getWriter().print(error);
+            } catch (JsonIOException ex) {
+                String error = "{\"result\":\"error\",\"errorMsg\":\"" + ex.getMessage() + "\"}";
+                response.getWriter().print(error);
+            } finally {
+                dataDao.close();
             }
         }
     }
 
-    private CoverageData getCoverageDateFromRequest(HttpServletRequest request) throws ServletException {
+    private static CoverageData getCoverageDateFromRequest(HttpServletRequest request) 
+            throws ServletException {
         CoverageData cd = new CoverageData();
         try {
-            if (!"".equalsIgnoreCase(request.getParameter("id")) && 
-                    request.getParameter("id") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("id"))
+                    && request.getParameter("id") != null) {
                 cd.setId(Integer.parseInt(request.getParameter("id")));
             }
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -219,49 +222,55 @@ public class DataController extends HttpServlet {
             cd.setEdition(request.getParameter("edition"));
             cd.setSupplement(request.getParameter("supplement"));
             cd.setSource(request.getParameter("source"));
-            if (!"".equalsIgnoreCase(request.getParameter("pageNo")) && 
-                    request.getParameter("pageNo") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("pageNo"))
+                    && request.getParameter("pageNo") != null) {
                 cd.setPageNo(Integer.parseInt(request.getParameter("pageNo")));
             }
-            if (!"".equalsIgnoreCase(request.getParameter("height")) && 
-                    request.getParameter("height") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("height"))
+                    && request.getParameter("height") != null) {
                 cd.setHeight(Integer.parseInt(request.getParameter("height")));
             }
-            if (!"".equalsIgnoreCase(request.getParameter("width")) && 
-                    request.getParameter("width") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("width"))
+                    && request.getParameter("width") != null) {
                 cd.setWidth(Integer.parseInt(request.getParameter("width")));
             }
-            if (!"".equalsIgnoreCase(request.getParameter("totalArticleSize")) && 
-                    request.getParameter("totalArticleSize") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("totalArticleSize"))
+                    && request.getParameter("totalArticleSize") != null) {
                 cd.setTotalArticleSize(Integer.parseInt(request.getParameter("totalArticleSize")));
             }
-            if (!"".equalsIgnoreCase(request.getParameter("circulationFigure")) && 
-                    request.getParameter("circulationFigure") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("circulationFigure"))
+                    && request.getParameter("circulationFigure") != null) {
                 cd.setCirculationFigure(Integer.parseInt(request.getParameter("circulationFigure")));
             }
-            if (!"".equalsIgnoreCase(request.getParameter("journalistFactor")) && 
-                    request.getParameter("journalistFactor") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("journalistFactor"))
+                    && request.getParameter("journalistFactor") != null) {
                 cd.setJournalistFactor(Integer.parseInt(request.getParameter("journalistFactor")));
             }
-            if (!"".equalsIgnoreCase(request.getParameter("quantitativeAve")) && 
-                    request.getParameter("quantitativeAve") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("quantitativeAve"))
+                    && request.getParameter("quantitativeAve") != null) {
                 cd.setQuantitativeAve(new BigDecimal(request.getParameter("quantitativeAve")));
             }
-            if (!"".equalsIgnoreCase(request.getParameter("imageExists")) && 
-                    request.getParameter("imageExists") != null) {
+            if (!"".equalsIgnoreCase(request.getParameter("imageExists"))
+                    && request.getParameter("imageExists") != null) {
                 cd.setImageExists(request.getParameter("imageExists"));
             }
             Blob b = null;
+            String fileName = "";
+            String contentType = "";
             try {
                 Part filePart = request.getPart("image");
                 InputStream fileContent = filePart.getInputStream();
                 byte[] bytes = IOUtils.toByteArray(fileContent);
                 b = new SerialBlob(bytes);
+                fileName = filePart.getSubmittedFileName();
+                contentType = filePart.getContentType();
             } catch (IOException ex) {
                 Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
             }
             if (b != null && b.length() != 0) {
                 cd.setImageBlob(b);
+                cd.setImageFileName(fileName);
+                cd.setImageType(contentType);
             }
         } catch (ParseException ex) {
             Logger.getLogger(DataController.class.getName()).log(Level.SEVERE, null, ex);
@@ -283,13 +292,12 @@ public class DataController extends HttpServlet {
 
     private Keyword getKeywordFromRequest(HttpServletRequest request) {
         Keyword kw = new Keyword();
-        if (!"".equalsIgnoreCase(request.getParameter("id")) && 
-                request.getParameter("id") != null) {
+        if (!"".equalsIgnoreCase(request.getParameter("id"))
+                && request.getParameter("id") != null) {
             kw.setId(Integer.parseInt(request.getParameter("id")));
         }
         kw.setKeyword(request.getParameter("keyword"));
         kw.setIsDeleted(request.getParameter("isDeleted"));
         return kw;
     }
-
 }

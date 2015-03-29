@@ -125,9 +125,9 @@
                 <input name="journalistFactor" class="easyui-numberbox" validType="validJF">
             </div>
             <div class="fitem">
-                <label>Image:</label>
-                <input name="image" accept="image/*" class="easyui-filebox" style="width:380px" 
-                       data-options="buttonText: 'Choose Image', buttonAlign: 'left'">
+                <label>Image <i>(1MB)</i>:</label>
+                <input name="image" class="easyui-filebox" style="width:380px" validType="validateFileType"
+                       data-options="buttonText: 'Choose Image', buttonAlign: 'left'" >
             </div>
         </form>
     </div>
@@ -191,15 +191,22 @@
                 return $(this).form('validate');
             },
             success: function (result) {
-                var result = eval('(' + result + ')');
-                if (result.errorMsg) {
+                if (result.valueOf().indexOf('Error in multipart initialization') > 0) {
                     $.messager.show({
                         title: 'Error',
-                        msg: result.errorMsg
-                    });
+                        msg: 'Image size is more than 2MB'
+                    });                    
                 } else {
-                    $('#dlg').dialog('close');        // close the dialog
-                    $('#dg').datagrid('reload');    // reload the user data
+                    var res = eval('(' + result + ')');
+                    if (res.errorMsg) {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: res.errorMsg
+                        });
+                    } else {
+                        $('#dlg').dialog('close');        // close the dialog
+                        $('#dg').datagrid('reload');    // reload the user data
+                    }
                 }
             }
         });
@@ -438,6 +445,18 @@
                     return true;
             },
             message: 'Please enter a value between 1 and 5.'
+        }
+    }); 
+    $.extend($.fn.validatebox.defaults.rules, {
+        validateFileType: {
+            validator: function (value) {
+                var validTypes = ["jpg", "jpeg", "png", "gif", "bmp"];
+                var dot = value.valueOf().lastIndexOf(".");
+                var type = value.valueOf().substring(dot + 1).toLowerCase();
+                if (validTypes.indexOf(type) != -1) 
+                    return true;
+            },
+            message: 'Only JPG, JPEG, PNG, GIF and BMP file formats allowed'
         }
     });
 </script>

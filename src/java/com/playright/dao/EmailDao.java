@@ -525,8 +525,8 @@ public class EmailDao {
             finalSb.append(sb);
         }
 
-        rs.close();
-        pstmt.close();
+//        rs.close();
+//        pstmt.closeclose();
         return finalSb.toString();
     }
 }
