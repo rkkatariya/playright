@@ -125,13 +125,18 @@ public class DataController extends HttpServlet {
                     String jsonArray = gson.toJson(data);
                     response.getWriter().print(jsonArray);
                 } else if (action.equals("saveCvgData")) {
-                    CoverageData cd = getCoverageDateFromRequest(request);
-                    if (cd.getId() == null || cd.getId() == 0) {
-                        dataDao.addCoverageData(cd);
+                    if (request.getParameterMap().size() > 2) {
+                        CoverageData cd = getCoverageDateFromRequest(request);
+                        if (cd.getId() == null || cd.getId() == 0) {
+                            dataDao.addCoverageData(cd);
+                        } else {
+                            dataDao.updateCoverageData(cd);
+                        }
+                        response.getWriter().print(successResponse);
                     } else {
-                        dataDao.updateCoverageData(cd);
+                        response.setContentType("text/html");
+                        response.getWriter().print("Error: Error in multipart initialization");
                     }
-                    response.getWriter().print(successResponse);
                 } else if (action.equals("updateCvgData")) {
                     CoverageData cd = getCoverageDateFromRequest(request);
                     dataDao.updateCoverageData(cd);

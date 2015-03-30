@@ -327,8 +327,8 @@
         <div id="body_container">
             <div class="printbutton">
                 <div class="innerdivf" >
-                    <h style="font-size: 22px">Total PR Value is &#x20B9; </h>
-                    <h style="font-size: 22px" id="totalPRValue"></h>
+                    <h style="font-size: 19px">Total PR Value is &#x20B9; </h>
+                    <h style="font-size: 19px" id="totalPRValue"></h>
                 </div>        
             </div>          
             <div class="rowdiv">

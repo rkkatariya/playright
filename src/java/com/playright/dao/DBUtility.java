@@ -42,11 +42,11 @@ public class DBUtility {
     public static Connection getConnection() throws Exception {
         Context initContext = new InitialContext();
         //this is needed for tomcat
-//        Context envContext = (Context) initContext.lookup("java:/comp/env");
-//        DataSource ds = (DataSource) envContext.lookup("playRightAnalyticsPool");
+        Context envContext = (Context) initContext.lookup("java:/comp/env");
+        DataSource ds = (DataSource) envContext.lookup("playRightAnalyticsPool");
         
         //this is for glass fish
-        DataSource ds = (DataSource) initContext.lookup("jdbc/playRightAnalyticsDS");        
+//        DataSource ds = (DataSource) initContext.lookup("jdbc/playRightAnalyticsDS");        
         
         Connection conn = ds.getConnection();
         return conn;

@@ -339,8 +339,8 @@
         <div id="body_container">
             <div class="printbutton">
                 <div class="innerdivf" >
-                    <h style="font-size: 20px">Total PR Value is &#x20B9; </h>
-                    <h style="font-size: 20px" id="totalPRValue"></h>
+                    <h style="font-size: 18px">Total PR Value is &#x20B9; </h>
+                    <h style="font-size: 18px" id="totalPRValue"></h>
                     <button id="print" name="print" onclick="window.print();" style="float: right; margin-right: 50">Print</button>
                 </div>        
             </div>            

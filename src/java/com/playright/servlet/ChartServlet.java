@@ -176,19 +176,16 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
     }
     
     private static String getValidMySQLDate(String inSdf, String inDate) {
-        String dateSql;
         SimpleDateFormat sdfIn = new SimpleDateFormat(inSdf);
         //Needed for mySQL
         SimpleDateFormat sdfSql = new SimpleDateFormat("yyyy-MM-dd");
+        String dateSql = sdfSql.format(Calendar.getInstance().getTime());;        
         try {
-            if (inDate == null || "".equals(inDate)) {
-                dateSql = sdfSql.format(Calendar.getInstance().getTime());
-            } else {
+            if (inDate != null && !"".equals(inDate)) {
                 dateSql = sdfSql.format(sdfIn.parse(inDate));
             }
         } catch (ParseException ex) {
             Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
-            dateSql = sdfSql.format(Calendar.getInstance().getTime());
         }
         return dateSql;
     }

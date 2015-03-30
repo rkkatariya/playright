@@ -36,7 +36,7 @@
                     <th field="totalArticleSize" width="50" align="right"><b>Total Article Size</b></th>
                     <th field="circulationFigure" width="50" align="right"><b>Circulation Figure</b></th>
                     <th field="quantitativeAve" width="50" align="right"><b>Quantitative AVE</b></th>
-                    <th field="journalistFactor" width="50" align="right"><b>Journalist Factor</b></th>
+                    <th field="journalistFactor" align="right"><b>Journalist Factor</b></th>
                     <th field="imageUrl" align="center"><b>Image</b></th>
                 </tr>
             </thead>
@@ -50,7 +50,7 @@
     <div id="dlg" class="easyui-dialog" style="width:50%;height:585px;padding:10px 20px"
          closed="true" buttons="#dlg-buttons">
         <div class="ftitle">Manage Analytical Data</div>
-        <form id="fm" method="post" enctype="multipart/form-data" novalidate>
+        <form id="fm" method="POST" enctype="multipart/form-data" novalidate>
             <div class="fitem" hidden="true">
                 <input name="id" class="easyui-textbox"/>
             </div>
@@ -66,7 +66,7 @@
             </div>
             <div class="fitem">
                 <label>Language:</label>
-                <input name="language" class="easyui-combobox" required="true"
+                <input id="language" name="language" class="easyui-combobox" required="true"
                        data-options="
                        valueField: 'value',
                        textField: 'value',
@@ -122,7 +122,13 @@
             </div>
             <div class="fitem">
                 <label>Journalist Factor:</label>
-                <input name="journalistFactor" class="easyui-numberbox" validType="validJF">
+                <select  id="journalistFactor" name="journalistFactor" class="easyui-combobox">
+                    <option value="1">Editor</option>
+                    <option value="2">Reporter</option>
+                    <option value="3">Special Correspondent</option>
+                    <option value="4">Bureau</option>
+                    <option value="5">PTI Copy</option>                    
+                </select>
             </div>
             <div class="fitem">
                 <label>Image <i>(1MB)</i>:</label>
@@ -194,7 +200,7 @@
                 if (result.valueOf().indexOf('Error in multipart initialization') > 0) {
                     $.messager.show({
                         title: 'Error',
-                        msg: 'Image size is more than 2MB'
+                        msg: 'Image size is more than 1MB'
                     });                    
                 } else {
                     var res = eval('(' + result + ')');
@@ -204,8 +210,9 @@
                             msg: res.errorMsg
                         });
                     } else {
-                        $('#dlg').dialog('close');        // close the dialog
+                        $('#dlg').dialog('close');      // close the dialog
                         $('#dg').datagrid('reload');    // reload the user data
+                        $('#language').combobox('reload');
                     }
                 }
             }

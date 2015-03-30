@@ -99,10 +99,16 @@ public class ChartDao {
             cd.add(new ColumnDescription("newspaper", ValueType.TEXT, "Newspaper"));
             cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
         } else if ("journalfactorsplit".equals(chart)) {
-            query = addDateFilter("select journalist_factor, count(*) as articles "
-                    + "from pr_cvg_data group by journalist_factor", 
-                    fromDate, toDate, allData);
-            cd.add(new ColumnDescription("journalfact", ValueType.TEXT, "Joutnalist Factor"));
+            query = "select lov.list_value as journalist_factor, count(*) as articles \n" +
+                    "from pr_cvg_data cd, list_of_values lov\n" +
+                    "where cd.journalist_factor = lov.list_name\n" +
+                    "and lov.is_deleted != 'Y'\n" +
+                    "and lov.list_type = 'JOURNALIST_FACTOR'\n";
+            if (!"Y".equalsIgnoreCase(allData)) {
+                query = query + "and cd.news_date >= '"+fromDate+"' and cd.news_date <= '"+toDate+"'\n";
+            }
+            query = query + " group by journalist_factor";
+            cd.add(new ColumnDescription("journalfact", ValueType.TEXT, "Journalist Factor"));
             cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
         } else if ("cfvaluebar".equals(chart)) {
             query = "select em.commodity as keyword, round(sum(\n" +
