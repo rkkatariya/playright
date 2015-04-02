@@ -9,6 +9,8 @@ import com.playright.dao.EmailDao;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -63,15 +65,15 @@ public class CSVServlet extends HttpServlet {
         //processRequest(request, response);
         EmailDao emailDao = new EmailDao();
         response.setContentType("text/csv");
-        response.setHeader("Content-Disposition", "attachment; filename=\"playrightData.csv\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"PlayRightData.csv\"");
         try {
             String outputResult = emailDao.fetchDataForCSV(request.getParameter("fromDate"), request.getParameter("toDate"));
             OutputStream outputStream = response.getOutputStream();
             outputStream.write(outputResult.getBytes());
             outputStream.flush();
             outputStream.close();
-        } catch (Exception e) {
-            System.out.println(e.toString());
+        } catch (Exception ex) {
+            Logger.getLogger(CSVServlet.class.getName()).log(Level.SEVERE, null, ex);
         }finally{
             emailDao.close();
         }

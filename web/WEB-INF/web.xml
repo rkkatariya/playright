@@ -54,7 +54,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CSVServlet</servlet-name>
-        <url-pattern>/secured/CSVServlet</url-pattern>
+        <url-pattern>/CSVServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HelloWorld</servlet-name>

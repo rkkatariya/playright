@@ -74,12 +74,12 @@ public class DataDao {
 
     public ArrayList<EntityMatrix> getEntityMatrixByCvgDataId(Integer cvgDataId) {
         ArrayList<EntityMatrix> list = new ArrayList<EntityMatrix>();
-        String query = new String("select em.id, k.keyword, em.headline, em.image, " + 
-                                "em.article, " + cvgDataId + " as pr_cvg_data_id " + 
-                                "from pr_keyword k left join (select * from " + 
-                                "pr_entity_matrix where pr_cvg_data_id = ?) em " +
-                                "on k.keyword = em.commodity " +
-                                "where k.is_deleted = 'N'");
+        String query = "select em.id, k.keyword, em.headline, em.image, " + 
+                "em.article, " + cvgDataId + " as pr_cvg_data_id " +
+                "from pr_keyword k left join (select * from " +
+                "pr_entity_matrix where pr_cvg_data_id = ?) em " +
+                "on k.keyword = em.commodity " +
+                "where k.is_deleted = 'N'";
         try {
             PreparedStatement ps = connection.prepareCall(query);
             ps.setInt(1, cvgDataId);

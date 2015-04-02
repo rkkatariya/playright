@@ -50,9 +50,17 @@ public class EmailDao {
         }
         
         StringBuffer csvData = new StringBuffer();
-        csvData.append("News Date, Newspaper, Language, Headline, Edition, Supplement, Source, Page No, Height, Width, Total Article, Circulation Figure, Quantitative AVE, Journalist Factor, Image");
+        csvData.append("News Date, Newspaper, Language, Headline, Edition, Supplement, Source, Page No, Height, Width, Total Article Size, Circulation Figure, Quantitative AVE, Journalist Factor, Image Exists, Image");
         csvData.append("\n");
-        PreparedStatement stmt = connection.prepareStatement("select date_format(news_date,'%d/%m/%Y') as news_date,concat('\"',IFNULL(newspaper,''),'\",\"', IFNULL(language,''),'\",\"',IFNULL(headline,''),'\",\"',IFNULL(edition,''),'\",\"',IFNULL(supplement,''),'\",\"',IFNULL(source,''),'\",\"',IFNULL(page_no,''),'\",\"',IFNULL(height,''),'\",\"',IFNULL(width,''),'\",\"',IFNULL(total_article_size,''),'\",\"',IFNULL(circulation_figure,''),'\",\"',IFNULL(quantitative_ave,''),'\",\"',IFNULL(journalist_factor,''),'\",\"',IFNULL(image_exists,''),'\"') as data from pr_cvg_data where news_date >= str_to_date(?,'%d/%m/%Y') and news_date <= str_to_date(?,'%d/%m/%Y')");
+        PreparedStatement stmt = connection.prepareStatement("select date_format(news_date,'%d/%m/%Y') as news_date,"
+                + "concat('\"',IFNULL(newspaper,''),'\",\"', IFNULL(language,''),'\",\"',IFNULL(headline,''),'\",\"',"
+                + "IFNULL(edition,''),'\",\"',IFNULL(supplement,''),'\",\"',IFNULL(source,''),'\",\"',"
+                + "IFNULL(page_no,''),'\",\"',IFNULL(height,''),'\",\"',IFNULL(width,''),'\",\"',"
+                + "IFNULL(total_article_size,''),'\",\"',IFNULL(circulation_figure,''),'\",\"',"
+                + "IFNULL(quantitative_ave,''),'\",\"',IFNULL(journalist_factor,''),'\",\"',"
+                + "IFNULL(image_exists,''),'\",\"',IFNULL(image_filename,''),'\"') as data "
+                + "from pr_cvg_data where news_date >= str_to_date(?,'%d/%m/%Y') "
+                + "and news_date <= str_to_date(?,'%d/%m/%Y')");
         stmt.setString(1, fromDate);
         stmt.setString(2, toDate);
         ResultSet rs = stmt.executeQuery();

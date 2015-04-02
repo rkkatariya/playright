@@ -29,8 +29,8 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="generateCharts('../charts.jsp')">View Charts</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="showModal('CHARTS')">Email Charts</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="showModal('HTML')">Email Data</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="downloadAsCSV()">Download Data</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">Clear Dates</a>
-                <!--<a href="javascript:void(0)" class="easyui-linkbutton" onclick="downloadAsCSV()">Download Data</a>-->
             </div>
         </div>
 
@@ -39,6 +39,7 @@
             <div style="text-align:center;padding:20px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="generateChartsAllData('../charts_print.jsp')">Print Charts</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="generateChartsAllData('../charts.jsp')">View Charts</a>
+<!--                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="downloadAsCSVAllData()">Download Data</a>-->
             </div>
         </div>
     </div>
@@ -125,12 +126,20 @@
     function downloadAsCSV() {
         var fromDate = $('input[name="fromDate"]').val();
         var toDate = $('input[name="toDate"]').val();
-        document.getElementById("ff").action = '/playright/CSVServlet?fromDate=' + fromDate + '&toDate=' + toDate;
+        var allData = $('input[name="allData"]').val();
+        var params = 'fromDate=' + fromDate + '&toDate=' + toDate + '&allData=' + allData;
+        document.getElementById("ff").action = '/playright/CSVServlet?' + params;
         document.getElementById("ff").method = 'GET';
         document.getElementById("ff").submit();
         document.getElementById("ff").action = 'charts.jsp';
     }
     ;
+    function downloadAsCSVAllData() {
+        document.getElementById("allData").value = "Y";
+        downloadAsCSV();
+        document.getElementById("allData").value = "N";
+    }
+    ;    
 </script>
 <script type="text/javascript">
     function myformatter(date) {

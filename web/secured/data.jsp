@@ -36,7 +36,7 @@
                     <th field="totalArticleSize" width="50" align="right"><b>Total Article Size</b></th>
                     <th field="circulationFigure" width="50" align="right"><b>Circulation Figure</b></th>
                     <th field="quantitativeAve" width="50" align="right"><b>Quantitative AVE</b></th>
-                    <th field="journalistFactor" align="right"><b>Journalist Factor</b></th>
+                    <th field="journalistFactor" width="50" align="right"><b>Journalist Factor</b></th>
                     <th field="imageUrl" align="center"><b>Image</b></th>
                 </tr>
             </thead>
