@@ -20,4 +20,10 @@ INSERT INTO `playright`.`list_of_values` (`list_type`, `list_value`, `list_name`
 INSERT INTO `playright`.`list_of_values` (`list_type`, `list_value`, `list_name`) VALUES ('JOURNALIST_FACTOR', 'Special Correspondent', '3');
 INSERT INTO `playright`.`list_of_values` (`list_type`, `list_value`, `list_name`) VALUES ('JOURNALIST_FACTOR', 'Bureau', '4');
 INSERT INTO `playright`.`list_of_values` (`list_type`, `list_value`, `list_name`) VALUES ('JOURNALIST_FACTOR', 'PTI copy', '5');
-
+/
+ALTER TABLE `playright`.`pr_cvg_data` 
+CHANGE COLUMN `Page_No` `Page_No` INT(11) NULL DEFAULT '0' ,
+CHANGE COLUMN `Height` `Height` INT(11) NULL DEFAULT '0' ,
+CHANGE COLUMN `Width` `Width` INT(11) NULL DEFAULT '0' ,
+CHANGE COLUMN `Total_Article_Size` `Total_Article_Size` INT(11) NULL DEFAULT '0' ,
+CHANGE COLUMN `Circulation_Figure` `Circulation_Figure` INT(11) NULL DEFAULT '0' ;

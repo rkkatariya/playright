@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -71,10 +73,13 @@ public class EmbeddedImageEmailUtil {
 
         // creates a new e-mail message
         Message msg = new MimeMessage(session);
-
+        String[] toAddresses = toAddress.split(",", 10);
+        InternetAddress[] toIAddresses = new InternetAddress[toAddresses.length];
+        for(int i=0; i < toAddresses.length; i++) {
+            toIAddresses[i] = new InternetAddress(toAddresses[i]);
+        } 
         msg.setFrom(new InternetAddress(userName));
-        InternetAddress[] toAddresses = {new InternetAddress(toAddress)};
-        msg.setRecipients(Message.RecipientType.TO, toAddresses);
+        msg.setRecipients(Message.RecipientType.TO, toIAddresses);
         msg.setSubject(subject);
         msg.setSentDate(new Date());
 
@@ -99,9 +104,8 @@ public class EmbeddedImageEmailUtil {
                 try {
                     imagePart.attachFile(imageFilePath);
                 } catch (IOException ex) {
-                    ex.printStackTrace();
+                    Logger.getLogger(EmbeddedImageEmailUtil.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
                 multipart.addBodyPart(imagePart);
             }
         }

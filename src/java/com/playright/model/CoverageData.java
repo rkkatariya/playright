@@ -25,12 +25,12 @@ public class CoverageData {
     private String edition;
     private String supplement;
     private String source;
-    private Integer pageNo;
-    private Integer height;
-    private Integer width;
-    private Integer totalArticleSize;
-    private Integer circulationFigure;
-    private BigDecimal quantitativeAve;
+    private Integer pageNo = 0;
+    private Integer height = 0;
+    private Integer width = 0;
+    private Integer totalArticleSize = 0;
+    private Integer circulationFigure = 0;
+    private BigDecimal quantitativeAve = new BigDecimal(0);
     private String imageExists;
     private Integer journalistFactor;
     private String language;

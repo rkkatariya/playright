@@ -81,9 +81,12 @@ public class ChartDao {
         String query = null;
         ArrayList<ColumnDescription> cd = new ArrayList<ColumnDescription>();
         if ("citywisesplit".equalsIgnoreCase(chart)) {
-            query = addDateFilter("select edition, count(*) as articles "
-                    + "from pr_cvg_data group by edition", 
-                    fromDate, toDate, allData);
+            query = "select edition, count(*) as articles " +
+                    "from pr_cvg_data where edition not like 'http:%'";
+            if (!"Y".equalsIgnoreCase(allData)) {
+                query = query + " and news_date >= '"+fromDate+"' and news_date <= '"+toDate+"'\n";
+            }
+            query = query + " group by edition";
             cd.add(new ColumnDescription("edition", ValueType.TEXT, "City"));
             cd.add(new ColumnDescription("articles", ValueType.NUMBER, "Articles"));
         } else if ("languagewisesplit".equals(chart)) {

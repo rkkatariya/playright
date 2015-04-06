@@ -86,7 +86,7 @@ public class EmailServlet extends HttpServlet {
         String emailSubject = request.getParameter("emailSubject");
         String emailContent = request.getParameter("emailContent");
         String chartsLink = formURL(request).concat("/charts.jsp?fromDate=").concat(fromDate).concat("&toDate=").concat(toDate).concat("&allData=N");
-        String imageLink = formURL(request).concat("/DataController?action=displayImage&cvgDataId=");
+        String imageLink = formURL(request).concat("/DataController/<FILENAME>?action=displayImage&cvgDataId=");
 
         if ("HTML".equalsIgnoreCase(action)) {
             try {

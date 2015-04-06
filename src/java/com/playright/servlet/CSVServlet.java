@@ -74,7 +74,7 @@ public class CSVServlet extends HttpServlet {
             outputStream.close();
         } catch (Exception ex) {
             Logger.getLogger(CSVServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             emailDao.close();
         }
     }
