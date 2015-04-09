@@ -3,6 +3,7 @@
     Created on : Mar 13, 2015, 1:09:48 PM
     Author     : Rahul
 --%>
+<%@page import="com.playright.dao.SettingsDao"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
     <head>
@@ -12,6 +13,17 @@
         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script type="text/javascript">
+            var chartColors = "#e74c3c,#f1c40f,#c0392b".split(",");
+            $.ajax({
+                url: "ChartServlet",
+                data:'action=getChartColors',
+                type:"GET",
+                success:function(data){
+                    if (data !== "") {
+                        chartColors = data.split(",");
+                    }
+                }
+            });
             var fromDate = '<%= request.getParameter("fromDate")%>';
             var toDate = '<%= request.getParameter("toDate")%>';
             var allData = '<%= request.getParameter("allData")%>';
@@ -46,8 +58,6 @@
 
             }
             ;
-        </script>
-        <script type="text/javascript">
             function handleCityResponse(response) {
                 if (response.isError()) {
                     alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
@@ -57,7 +67,7 @@
                     chartArea: { 
                         height: '80%'
                     },
-                    colors: ['#e74c3c','#f1c40f','#c0392b'],
+                    colors: chartColors,
                     backgroundColor: '#ecf0f1',
                     pieHole: 0.5,
                     legend: {
@@ -81,8 +91,6 @@
                 var chart = new google.visualization.PieChart(document.getElementById('citywise_div'));
                 chart.draw(view, options);
             }
-        </script>
-        <script type="text/javascript">
             function handleLangResponse(response) {
                 if (response.isError()) {
                     alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
@@ -93,7 +101,7 @@
                         top: 15,
                         height: '70%'
                     },                    
-                    colors:['#e74c3c'],
+                    colors:[chartColors[0]],
                     backgroundColor: '#ecf0f1',
                     legend: {
                         position: 'none',
@@ -125,8 +133,7 @@
                 //        var chart = new google.charts.Bar(document.getElementById('langwise_div'));
                 //        chart.draw(data, google.charts.Bar.convertOptions(options));
             }
-        </script>
-        <script type="text/javascript">
+            ;
             function handleJournalFactResponse(response) {
                 if (response.isError()) {
                     alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
@@ -136,7 +143,7 @@
                     chartArea: { 
                         height: '80%'
                     },                    
-                    colors: ['#e74c3c','#f1c40f','#c0392b'],
+                    colors: chartColors,
                     backgroundColor: '#ecf0f1',
                     legend: {
                         position: 'labeled',
@@ -159,8 +166,7 @@
                 var chart = new google.visualization.PieChart(document.getElementById('journalfact_div'));
                 chart.draw(view, options);
             }
-        </script>
-        <script type="text/javascript">
+            ;
             function handleKeywordResponse(response) { 
                 if (response.isError()) {
                     alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
@@ -171,7 +177,7 @@
                         top: 15,
                         height: '65%'
                     },                    
-                    colors:['#f1c40f'],
+                    colors:[chartColors[1]],
                     backgroundColor: '#ecf0f1',
                     legend: {
                         position: 'none',
@@ -205,8 +211,7 @@
                 var chart = new google.visualization.ColumnChart(document.getElementById('circfig_div'));
                 chart.draw(view, options);
             }
-        </script>
-        <script type="text/javascript">
+            ;
             function handleTopEngResponse(response) {
                 if (response.isError()) {
                     alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
@@ -218,7 +223,7 @@
                         width: '55%', 
                         height: '80%'
                     },
-                    colors:['#f1c40f'],
+                    colors:[chartColors[1]],
                     backgroundColor: '#ecf0f1',
                     legend: {
                         position: 'none',
@@ -247,9 +252,8 @@
                 ]);
                 var chart = new google.visualization.BarChart(document.getElementById('topenglish_div'));
                 chart.draw(view, options);
-            }            
-        </script>        
-        <script type="text/javascript">
+            } 
+            ;
             function handleTopVernacularResponse(response) {
                 if (response.isError()) {
                     alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
@@ -261,7 +265,7 @@
                         width: '55%', 
                         height: '80%'
                     },
-                    colors:['#e74c3c'],
+                    colors:[chartColors[0]],
                     backgroundColor: '#ecf0f1',
                     legend: {
                         position: 'none',
@@ -295,6 +299,10 @@
 
     </head>
     <body>
+<%
+    String customerLogo = "images/" + request.getContextPath().replace("/", "") + ".png";
+    String customer = (String) request.getServletContext().getAttribute(SettingsDao.CUSTOMER);
+%>         
         <div id="header_container">
             <div id="header">
                 <div style="float: left; width: 15%">
@@ -316,11 +324,11 @@
                         <% } else { %>
                             <li style="padding: 0 0 5px 0; font-size: 12px;"><%= request.getParameter("fromDate")%> - <%= request.getParameter("toDate")%></li>
                         <% }%>
-                        <li style="padding: 0 0 5px 0; font-size: 12px;">Royal Challengers Bangalore</li>
+                        <li style="padding: 0 0 5px 0; font-size: 12px;"><%=customer%></li>
                     </ul>
                 </div>
                 <div style="float: right; width: 15%">
-                    <a href="index.jsp" style="text-align: right; float: right;"><img src="images/rcb.png" alt="Royal Challengers Bangalore" title="Royal Challengers Bangalore" border="0" /></a>
+                    <a href="index.jsp" style="text-align: right; float: right;"><img src="<%=customerLogo%>" alt="<%=customer%>" title="<%=customer%>" border="0" /></a>
                 </div>                
             </div>
         </div>            

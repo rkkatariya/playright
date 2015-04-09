@@ -102,7 +102,9 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
                         output = chartDao.getTotalPRValue(fromDateSql, toDateSql, allData);
                     } else if ("getMinMaxDateStr".equals(action)) {
                         output = chartDao.getMixMaxDateStr();
-                    }
+                    } else if ("getChartColors".equals(action)) {
+                        output = chartDao.getChartColors();
+                    } 
                 } catch (SQLException ex) {
                     Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {

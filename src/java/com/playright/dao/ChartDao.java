@@ -50,6 +50,17 @@ public class ChartDao {
             Logger.getLogger(ChartDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public String getChartColors() {
+        SettingsDao settingsDao = new SettingsDao();
+        String colors = "";
+        try {
+            colors = settingsDao.getPropValue(SettingsDao.CHART_COLORS);
+        } finally {
+            settingsDao.close();
+        }
+        return colors;
+    }
 
     public String getMixMaxDateStr() throws SQLException {
         String query = "select min(news_date) as min_date, max(news_date) as max_date from pr_cvg_data";

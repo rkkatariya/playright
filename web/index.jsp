@@ -30,5 +30,8 @@ if (request.getSession().getAttribute("user") != null) {
             <%session.removeAttribute("error");
               }%>
         </div>
+        <div class="links">
+            <h2><a href="<%="http://"+request.getServerName()%>">Go Back Main Page</a></h2>
+        </div>
 </div>              
 <jsp:include page="index_footer.jsp"/>

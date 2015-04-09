@@ -90,9 +90,10 @@ public class EmailServlet extends HttpServlet {
 
         if ("HTML".equalsIgnoreCase(action)) {
             try {
+                String customerLogo = request.getContextPath().replace("/", "") + ".png";
                 // inline images
                 Map<String, String> inlineImages = new HashMap<String, String>();
-                String img_0_0_2 = getClass().getResource("rcb.png").getFile();
+                String img_0_0_2 = getClass().getResource(customerLogo).getFile();
                 inlineImages.put("img_0_0_2",
                         img_0_0_2);
                 String img_0_0_1 = getClass().getResource("playright.png").getFile();
