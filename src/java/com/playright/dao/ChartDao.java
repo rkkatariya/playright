@@ -29,7 +29,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -68,11 +70,12 @@ public class ChartDao {
         ResultSet rs = stmt.executeQuery(query);
         Date minDate = new Date(0);
         Date maxDate = new Date(0);
+        DateFormat df = new SimpleDateFormat("dd MMM yyyy");
         while (rs.next()) {
             minDate = rs.getDate("min_date");
             maxDate = rs.getDate("max_date");            
         }
-        return minDate.toString() + " - " + maxDate.toString();
+        return df.format(minDate) + " - " + df.format(maxDate);
     }
 
     public String getTotalPRValue(String fromDate, String toDate, String allData) throws SQLException {

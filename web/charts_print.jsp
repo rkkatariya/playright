@@ -320,11 +320,11 @@
                 <div style="float: left; width: 15%">
                     <img src="images/logo.png" alt="PlayRight Analytics" title="PlayRight Analytics" border="0" />
                 </div>
-                <div style="float: left; height: 86px; margin: 0 auto; width: 70%;">
-                    <ul style="text-align: center; padding: 15px 0 0 0;">
+                <div style="float: left; height: 73px; margin: 0 auto; width: 70%;">
+                    <ul style="text-align: center; padding: 7px 0 0 0;">
                         <li style="padding: 0 0 5px 0; font-size: 20px;">PlayRight Media Analysis</li>
                         <% if ("Y".equalsIgnoreCase(request.getParameter("allData"))) { %>
-                            <li id="dateStr" style="padding: 5px 0 5px 0; font-size: 12px;"></li>
+                            <li id="dateStr" style="padding: 5px 0 0 0; font-size: 12px;"></li>
                             <script type="text/javascript">
                                 $.ajax({
                                     url: "ChartServlet",
@@ -334,9 +334,9 @@
                                 });                                
                             </script>
                         <% } else { %>
-                            <li style="padding: 0 0 5px 0; font-size: 12px;"><%= request.getParameter("fromDate")%> - <%= request.getParameter("toDate")%></li>
+                            <li style="padding: 5px 0 0 0; font-size: 12px;"><%= request.getParameter("fromDate")%> - <%= request.getParameter("toDate")%></li>
                         <% }%>
-                        <li style="padding: 0 0 5px 0; font-size: 12px;"><%=customer%></li>
+                        <li style="padding: 5px 0 0 0; font-size: 12px;"><%=customer%></li>
                     </ul>
                 </div>
                 <div style="float: right; width: 15%">
@@ -352,10 +352,7 @@
                     <button id="print" name="print" onclick="window.print();" style="float: right; margin-right: 50">Print</button>
                 </div>        
             </div>            
-            <div class="printbutton">
-                <div class="innerdivf">
-                    
-                </div>        
+            <div class="printbutton" style="height: 24px; padding: 0">
             </div>                 
             <div class="rowdiv">
                 <div class="innerdivl">
@@ -397,7 +394,7 @@
                     <div id="topvernacular_div"></div>
                 </div>
             </div>
-            <div class="rowdivtitle" style="height: 35px;">
+            <div class="rowdivtitle" style="height: 30px;">
                 <div class="innerdivl">
                     <h>Top English Print Distribution</h>
                 </div>

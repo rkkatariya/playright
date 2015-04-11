@@ -326,8 +326,7 @@ public class EmailDao {
         String imageFilename = rs.getString("image_filename");
         if (imageFilename != null && !"".equals(imageFilename)) {
             headline = "<a style=\"text-decoration: none; color: #c0392b;\" target=\"_blank\" href=\""
-                    + imageLink.replace("<FILENAME>", imageFilename)
-                    + rs.getString("cvgDataId") + "\">" + rs.getString("headline") + "</a>";
+                    + imageLink + rs.getString("cvgDataId") + "\">" + rs.getString("headline") + "</a>";
         } else {
             headline = rs.getString("headline");
         }

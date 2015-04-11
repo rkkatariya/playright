@@ -206,7 +206,7 @@ public class DataDao {
         String filename = rs.getString("image_filename"); 
         cd.setImageFileName(filename);
         if (filename != null && !"".equals(filename)) {
-            cd.setImageUrl("<a target=\"_blank\" href=\"DataController/"+filename+"?action=displayImage&cvgDataId="+rs.getInt("id")+"\">img</a>");
+            cd.setImageUrl("<a target=\"_blank\" href=\"../image.jsp?cvgDataId="+rs.getInt("id")+"\">img</a>");
         }
         return cd;
     }
