@@ -128,10 +128,10 @@
         var toDate = $('input[name="toDate"]').val();
         var allData = $('input[name="allData"]').val();
         var params = 'fromDate=' + fromDate + '&toDate=' + toDate + '&allData=' + allData;
-        document.getElementById("ff").action = '/playright/CSVServlet?' + params;
+        document.getElementById("ff").action = 'CSVServlet?' + params;
         document.getElementById("ff").method = 'GET';
         document.getElementById("ff").submit();
-        document.getElementById("ff").action = 'charts.jsp';
+//        document.getElementById("ff").action = 'charts.jsp';
     }
     ;
     function downloadAsCSVAllData() {

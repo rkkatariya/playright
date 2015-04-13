@@ -104,23 +104,6 @@ public class ChartServlet extends HttpServlet implements DataTableGenerator {
                         output = chartDao.getMixMaxDateStr();
                     } else if ("getChartColors".equals(action)) {
                         output = chartDao.getChartColors();
-                    } else if ("getImgHeadingStr".equals(action)) {
-                        try {
-                            Integer cvgDataId = Integer.parseInt(request.getParameter("cvgDataId"));
-                            output = "Here is your Heading";
-                        } catch (NumberFormatException ex) {
-                            Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
-                            output = "Error getting Heading";
-                        }
-                    } else if ("getHeadline".equals(action)) {
-                        try {
-                            Integer cvgDataId = Integer.parseInt(request.getParameter("cvgDataId"));
-//                            output = chartDao.getHeadline(cvgDataId);
-                            output = "";
-                        } catch (NumberFormatException ex) {
-                            Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
-                            output = "Error getting Headline";
-                        }
                     } 
                 } catch (SQLException ex) {
                     Logger.getLogger(ChartServlet.class.getName()).log(Level.SEVERE, null, ex);
