@@ -24,7 +24,7 @@
         <div id="header_container">
             <div id="header">
                 <a href="../index.jsp" style="text-align: left; float: left;"><img id="imgl" src="../images/logo.png" alt="PlayRight Analytics" title="PlayRight Analytics" border="0" /></a>
-                <a href="../index.jsp" style="text-align: right; float: right;"><img id="imgr" src="<%=customerLogo%>" alt="<%=customer%>" title="<%=customer%>" border="0" /></a>
+                <!--<a href="../index.jsp" style="text-align: right; float: right;"><img id="imgr" src="<%=customerLogo%>" alt="<%=customer%>" title="<%=customer%>" border="0" /></a>-->
             </div>
             <div id="line"></div>
             <div id="navigator">

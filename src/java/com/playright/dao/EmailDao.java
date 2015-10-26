@@ -147,11 +147,11 @@ public class EmailDao {
     private String formHtmlTemplate(String fromDate, String toDate, String imageLink) throws Exception {
         SettingsDao settingsDao = new SettingsDao();
         String customer = "";
-        try {
-            customer = settingsDao.getPropValue(SettingsDao.CUSTOMER);
-        } finally {
-            settingsDao.close();
-        }
+//        try {
+//            customer = settingsDao.getPropValue(SettingsDao.CUSTOMER);
+//        } finally {
+//            settingsDao.close();
+//        }
         StringBuilder sb = new StringBuilder("<html>\n");
         sb.append("    <head>  \n");
         sb.append("        <title></title>  \n");
@@ -190,7 +190,7 @@ public class EmailDao {
         sb.append("                                        <tr>\n");
         sb.append("                                            <td style=\"width:100%; text-align: center; padding: 5px\">\n");
         sb.append("                                                <span style=\"font-family: 'Trebuchet MS', Helvetica, sans-serif; color: #000000; font-size: 12px; line-height: 1; *line-height: normal; white-space: nowrap; font-weight: bold;\">");
-        sb.append(customer);
+//        sb.append(customer);
         sb.append("</span>\n");
         sb.append("                                            </td>\n");
         sb.append("                                        </tr>\n");
@@ -206,11 +206,11 @@ public class EmailDao {
         sb.append("                                    </table>\n");
         sb.append("                                </div>\n");
         sb.append("                                <div style=\"float: right; width: 15%; margin: 0 auto;\">\n");
-        sb.append("                                    <img width=\"74\" src=\"cid:img_0_0_2\" alt=\"");
-        sb.append(customer);
-        sb.append("\" title=\"");
-        sb.append(customer);
-        sb.append("\"/>\n");
+//        sb.append("                                    <img width=\"74\" src=\"cid:img_0_0_2\" alt=\"");
+//        sb.append(customer);
+//        sb.append("\" title=\"");
+//        sb.append(customer);
+//        sb.append("\"/>\n");
         sb.append("                                </div>\n");
         sb.append("                            </td>\n");
         sb.append("                        </tr>\n");
@@ -221,7 +221,7 @@ public class EmailDao {
         sb.append("                            <td colspan=\"4\" style=\"background-color: #ecf0f1; \"></td>\n");
         sb.append("                            <td colspan=\"3\" style=\"background-color: #ecf0f1; text-indent: 0px;  vertical-align: middle;text-align: left;\">\n");
         sb.append("                                <span style=\"font-family: Verdana, Arial, Helvetica, sans-serif; color: #c0392b; white-space: nowrap; font-size: 14px; font-weight: bold\">");
-        sb.append(customer);
+//        sb.append(customer);
         sb.append("</span>\n");
         sb.append("                            </td>\n");
         sb.append("                        </tr>\n");

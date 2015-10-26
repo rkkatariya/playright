@@ -31,7 +31,7 @@ if (request.getSession().getAttribute("user") != null) {
               }%>
         </div>
         <div class="links">
-            <h2><a href="<%="http://"+request.getServerName()%>">Go Back Main Page</a></h2>
+            <!--<h2><a href="<%="http://"+request.getServerName()%>">Go Back Main Page</a></h2>-->
         </div>
 </div>              
 <jsp:include page="index_footer.jsp"/>

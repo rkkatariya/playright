@@ -313,7 +313,8 @@
     <body>
 <%
     String customerLogo = "images/" + request.getContextPath().replace("/", "") + ".png";
-    String customer = (String) request.getServletContext().getAttribute(SettingsDao.CUSTOMER);
+//    String customer = (String) request.getServletContext().getAttribute(SettingsDao.CUSTOMER);
+    String customer = "";
 %>          
         <div id="header_container">
             <div id="header">
@@ -340,7 +341,7 @@
                     </ul>
                 </div>
                 <div style="float: right; width: 15%">
-                    <img src="<%=customerLogo%>" alt="<%=customer%>" title="<%=customer%>" border="0" />
+                    <!--<img src="<%=customerLogo%>" alt="<%=customer%>" title="<%=customer%>" border="0" />-->
                 </div>                
             </div> 
         </div>            

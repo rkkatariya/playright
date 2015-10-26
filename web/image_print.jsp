@@ -12,7 +12,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>PlayRight Analytics</title>
         <link href="css/prchart_print.css" rel="stylesheet" type="text/css" />
     </head>
@@ -38,7 +38,7 @@
                     </ul>
                 </div>
                 <div style="float: right; width: 15%">
-                    <a href="index.jsp" style="text-align: right; float: right;"><img src="<%=customerLogo%>" alt="<%=customer%>" title="<%=customer%>" border="0" /></a>
+                    <!--<a href="index.jsp" style="text-align: right; float: right;"><img src="<%=customerLogo%>" alt="<%=customer%>" title="<%=customer%>" border="0" /></a>-->
                 </div>                
             </div>
         </div>            
